@@ -22,7 +22,7 @@
 			<div class="content-container">
 				<div class="left-container">
 					<button
-						class="noselect left-container-button setReady socialsHeader"
+						class="noselect left-container-button socialsHeader"
 						onclick="togglePanel(this)"
 						optionID="socials"
 						leftSide="true"
@@ -32,7 +32,7 @@
 						<span class="blur">SOCIALS</span>
 					</button>
 					<button
-						class="noselect left-container-button setRobber mapHeader"
+						class="noselect left-container-button mapHeader"
 						onclick="togglePanel(this)"
 						optionID="map"
 						leftSide="true"
@@ -42,7 +42,7 @@
 						<span class="blur">MAP</span>
 					</button>
 					<button
-						class="noselect left-container-button setHeli settingsHeader"
+						class="noselect left-container-button settingsHeader"
 						onclick="togglePanel(this)"
 						optionID="settings"
 						leftSide="true"
@@ -52,7 +52,7 @@
 						<span class="blur">SETTINGS</span>
 					</button>
 					<button
-						class="noselect left-container-button setCopVeh galleryHeader"
+						class="noselect left-container-button galleryHeader"
 						onclick="togglePanel(this)"
 						optionID="gallery"
 						leftSide="true"
@@ -98,7 +98,7 @@
 							PLAYERS
 						</button>
 						<button
-							class="noselect header-button leaderboardHeader closeMenu"
+							class="noselect header-button closeMenu"
 							optionID="leavepause"
 							onclick="leaveLobby()"
 							tabindex="0"
@@ -180,18 +180,22 @@
 											<th class="opth-player-name">
 												PLAYER NAME
 											</th>
-											<th class="opth-level">LEVEL</th>
-											<th class="opth-rank">RANK</th>
-											<th class="opth-vip-rank">
-												VIP RANK
+											<th class="opth-col1">
+												DATA COL 1
 											</th>
-											<th class="opth-faction">
-												FACTION
+											<th class="opth-col2">
+												DATA COL 2
+											</th>
+											<th class="opth-col3">
+												DATA COL 3
+											</th>
+											<th class="opth-col4">
+												DATA COL 4
 											</th>
 										</tr>
 										<tr
 											class="players-table-row-template"
-											style="display: none"
+											style="display: flex"
 										>
 											<td>1</td>
 											<td>CritteR</td>

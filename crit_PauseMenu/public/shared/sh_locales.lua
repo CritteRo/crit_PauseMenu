@@ -12,34 +12,24 @@ nuiLocales = {
         MAIN_TITLE = "CritteR's Pause Menu",
         MAIN_DESCRIPTION = "This description works as well.",
 
-        READY_BUTTON = "DISCORD",
-        SET_ROBBER_BUTTON = "MAP",
-        SET_HELI_BUTTON = "SETTINGS",
-        SET_COP_VEH_BUTTON = "Select Preferred Police Vehicle",
-        SET_ROB_VEH_BUTTON = "Select Preferred Robber Vehicle",
+        BUTTON_SOCIALS = "SOCIALS",
+        BUTTON_MAP = "MAP",
+        BUTTON_SETTINGS = "SETTINGS",
+        BUTTON_GALLERY = "GALLERY",
+        BUTTON_INFORMATION = "INFORMATION",
+        BUTTON_PLAYER_LIST = "PLAYER LIST",
+        BUTTON_CLOSE_MENU = "CLOSE MENU",
+        BUTTON_LEAVE_SERVER = "LEAVE SERVER >>",
 
-        INFO_HEADER_BUTTON = "INFORMATION",
-        PLAYERS_HEADER_BUTTON = "PLAYER LIST",
-        LEADERBOARD_HEADER_BUTTON = "CLOSE MENU",
-        LEAVE_HEADER_BUTTON = "LEAVE SERVER >>",
+        HEADER_LEAVE_SERVER = "Are you sure you want to quit? We'll miss you :(",
+        HEADER_SOCIALS = "You can reach out to use here:",
 
-        HEADER_SELECT_ROBBER_VEHICLE = "Select your preferred robber vehicle. It's needed even if you don't want to play as one!",
-        HEADER_SELECT_COP_VEHICLE = "Select your preferred police vehicle. It's needed even if you want to play as Robber / Heli!",
-
-        YES = "YES",
-        NO = "NO",
+        TBL_ID = "ID",
         TBL_PLAYER_NAME = "PLAYER NAME",
-        TBL_IS_READY = "READY",
-        TBL_WANTS_ROBBER = "WANTS ROBBER",
-        TBL_WANTS_HELI = "WANTS HELI",
-        TBL_TOTAL_POINTS = "TOTAL POINTS",
-        TBL_WIN_RATIO = "WIN RATIO",
-
-        TBL_TOTAL_GAMES = "GAMES PLAYED",
-        TBL_ROBBER_GAMES = "ROBBER GAMES",
-        TBL_ROBBER_WINS = "ROBBER WINS",
-        TBL_COP_GAMES = "COP GAMES",
-        TBL_COP_WINS = "COP WINS",
+        TBL_COL1 = "SOMETHING 1",
+        TBL_COL2 = "SOMETHING 2",
+        TBL_COL3 = "SOMETHING 3",
+        TBL_COL4 = "SOMETHING 4"
     }
 }
 
@@ -52,7 +42,7 @@ nuiInfo = {
         {"title", "INFORMATION PANEL", "v1.0.0"},
         {'text', "Nostalgiq Romania", "Pause Menu Description - Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium voluptate dolorum ratione, distinctio natus perferendis laborum nemo eveniet dignissimos odit sunt vitae libero iure tempora, debitis ad facilis quisquam recusandae?"},
         {'text', "Video Showcase", '<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=-c6nXP1z5I_MhxZW" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'},
-        {'text', "Test it out!", "The pause menu is currently hosted on Nostalgiq Romania RPG!", "https://critte.ro/share/img/fivem_banner.png"},
+        {'text', "Test it out!", "The pause menu is currently hosted on Nostalgiq Romania RPG!", "https://critte.ro/share/img/fivem_banner.png", "https://nostalgiq.ro"},
         {'title', "<a href = 'https://crittero.tebex.io/package/6763003' target='_blank'>Get it now on Tebex!</a>", ""},
     }
 }

@@ -2,6 +2,9 @@ Config = {
     debug = true, -- Show debug prints in server and client console.
     defaultPlayerLanguage = 'en',   -- Needs to match a language in sh_locales.lua. Otherwise it will start throwing errors.
                                     -- If you only want to have one language, I would just leave this as "en", and only change the strings.
+
+    disableNUIblur = false,
+    disableNUItransitions = false,
 }
 
 Events = { -- List of events. Feel free to modify the names if you want.

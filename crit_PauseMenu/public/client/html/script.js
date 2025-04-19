@@ -11,57 +11,15 @@ window.addEventListener("message", (event) => {
 	if (event.data.type === "NUI_TOGGLE") {
 		// var x = document.getElementById("nui-top");
 		ToggleNUI(event.data.viz);
-		if (event.data.forceInfo) {
-			togglePanel(document.querySelector(".infoHeader"));
+		if (event.data.forcePanel) {
+			togglePanel(
+				document.querySelector(event.data.forcePanel) ||
+					document.querySelector(".infoHeader")
+			);
 		}
 	}
-	if (event.data.type === "UPDATE_UI") {
+	if (event.data.type === "UPDATE_PLAYER_LIST") {
 		waitingForUiUpdate = false;
-		if (typeof event.data.isReady !== "undefined") {
-			var _iR = document.querySelector(".setReady");
-			if (_iR) {
-				toggleElement(_iR, event.data.isReady);
-			}
-		}
-		if (typeof event.data.wantsRobber !== "undefined") {
-			var _wR = document.querySelector(".setRobber");
-			if (_wR) {
-				toggleElement(_wR, event.data.wantsRobber);
-			}
-		} else {
-			// console.log("Robber is undefined!");
-		}
-		if (typeof event.data.wantsHeli !== "undefined") {
-			var _wH = document.querySelector(".setHeli");
-			if (_wH) {
-				toggleElement(_wH, event.data.wantsHeli);
-			}
-		}
-
-		if (typeof event.data.copModel !== "undefined") {
-			var btns = document.querySelectorAll(".cop-vehicle");
-			btns.forEach((el) => {
-				if (el && el.hasAttribute("model")) {
-					if (el.getAttribute("model") === event.data.copModel[0]) {
-						toggleElement(el, true);
-					} else {
-						toggleElement(el, false);
-					}
-				}
-			});
-		}
-		if (typeof event.data.robModel !== "undefined") {
-			var btns = document.querySelectorAll(".rob-vehicle");
-			btns.forEach((el) => {
-				if (el && el.hasAttribute("model")) {
-					if (el.getAttribute("model") === event.data.robModel[0]) {
-						toggleElement(el, true);
-					} else {
-						toggleElement(el, false);
-					}
-				}
-			});
-		}
 		if (typeof event.data.players !== "undefined") {
 			SetupOnlinePlayersTable(event.data.players);
 		}
@@ -75,14 +33,9 @@ window.addEventListener("message", (event) => {
 		labels = event.data.labels;
 		setupLanguages(event.data.languages, event.data.currentLanguage);
 		setInfoPanelData(event.data.info);
-		if (typeof event.data.leaderboard !== "undefined") {
-			SetupLeaderboardsTable(event.data.leaderboard);
+		if (typeof event.data.players !== "undefined") {
+			SetupOnlinePlayersTable(event.data.players);
 		}
-		SetupPlayerVehiclesPanels(
-			event.data.robVehicles,
-			event.data.copVehicles,
-			event.data.useCfxImg
-		);
 	}
 });
 
@@ -260,69 +213,40 @@ function setupLabels(data, overrideTitle, overrideDesc) {
 		);
 	}
 
-	// Main buttons
-	document.querySelector(".setReady").children[0].innerHTML = escapeHtml(
-		data.READY_BUTTON
-	);
-	document.querySelector(".setRobber").children[0].innerHTML = escapeHtml(
-		data.SET_ROBBER_BUTTON
-	);
-	document.querySelector(".setHeli").children[0].innerHTML = escapeHtml(
-		data.SET_HELI_BUTTON
-	);
-
 	// Header buttons
+	document.querySelector(".socialsHeader").children[0].innerHTML = escapeHtml(
+		data.BUTTON_SOCIALS
+	);
+	document.querySelector(".mapHeader").children[0].innerHTML = escapeHtml(
+		data.BUTTON_MAP
+	);
+	document.querySelector(".settingsHeader").children[0].innerHTML =
+		escapeHtml(data.BUTTON_SETTINGS);
+	document.querySelector(".galleryHeader").children[0].innerHTML = escapeHtml(
+		data.BUTTON_GALLERY
+	);
 	document.querySelector(".infoHeader").innerHTML = escapeHtml(
-		data.INFO_HEADER_BUTTON
+		data.BUTTON_INFORMATION
 	);
 	document.querySelector(".playersHeader").innerHTML = escapeHtml(
-		data.PLAYERS_HEADER_BUTTON
+		data.BUTTON_PLAYER_LIST
 	);
-	document.querySelector(".leaderboardHeader").innerHTML = escapeHtml(
-		data.LEADERBOARD_HEADER_BUTTON
+	document.querySelector(".closeMenu").innerHTML = escapeHtml(
+		data.BUTTON_CLOSE_MENU
 	);
 	document.querySelector(".leaveLobby").innerHTML = escapeHtml(
-		data.LEAVE_HEADER_BUTTON
+		data.BUTTON_LEAVE_SERVER
 	);
 
-	// //Online Players & Leaderboard table headers
-	// document.querySelectorAll(".opth-player-name").forEach((x) => {
-	// 	x.innerHTML = escapeHtml(data.TBL_PLAYER_NAME);
-	// });
-	// document.querySelectorAll(".opth-total-points").forEach((x) => {
-	// 	x.innerHTML = escapeHtml(data.TBL_TOTAL_POINTS);
-	// });
-	// document.querySelectorAll(".opth-win-ratio").forEach((x) => {
-	// 	x.innerHTML = escapeHtml(data.TBL_WIN_RATIO);
-	// });
-
-	// document.querySelector(".opth-is-ready").innerHTML = escapeHtml(
-	// 	data.TBL_IS_READY
-	// );
-	// document.querySelector(".opth-wants-robber").innerHTML = escapeHtml(
-	// 	data.TBL_WANTS_ROBBER
-	// );
-	// document.querySelector(".opth-wants-heli").innerHTML = escapeHtml(
-	// 	data.TBL_WANTS_HELI
-	// );
-
-	// document.querySelector(".opth-cop-games").innerHTML = escapeHtml(
-	// 	data.TBL_COP_GAMES
-	// );
-	// document.querySelector(".opth-cop-wins").innerHTML = escapeHtml(
-	// 	data.TBL_COP_WINS
-	// );
-	// document.querySelector(".opth-robber-games").innerHTML = escapeHtml(
-	// 	data.TBL_ROBBER_GAMES
-	// );
-	// document.querySelector(".opth-robber-wins").innerHTML = escapeHtml(
-	// 	data.TBL_ROBBER_WINS
-	// );
-
-	//Vehicle header panels
-	document.querySelector(".leave-server-header-label").innerHTML = escapeHtml(
-		data.HEADER_SELECT_COP_VEHICLE
+	// //Online Players Table Headers
+	document.querySelector(".opth-id").innerHTML = escapeHtml(data.TBL_ID);
+	document.querySelector(".opth-player-name").innerHTML = escapeHtml(
+		data.TBL_PLAYER_NAME
 	);
+	document.querySelector(".opth-col1").innerHTML = escapeHtml(data.TBL_COL1);
+	document.querySelector(".opth-col2").innerHTML = escapeHtml(data.TBL_COL2);
+	document.querySelector(".opth-col3").innerHTML = escapeHtml(data.TBL_COL3);
+	document.querySelector(".opth-col4").innerHTML = escapeHtml(data.TBL_COL4);
 }
 
 // INFO PANEL CONSTRUCTION
@@ -403,71 +327,20 @@ function SetupOnlinePlayersTable(data) {
 	});
 }
 
-function YesNo(bool) {
-	if (bool === true) {
-		return labels.YES;
-	} else {
-		return labels.NO;
-	}
-}
-
 function CreateOnlinePlayerRow(data) {
 	var template = document.querySelector(".players-table-row-template");
 	var list = template.parentElement;
 	var cln = template.cloneNode(true);
 	cln.classList.add("players-table-row");
 	cln.style.display = "flex";
-	cln.children[0].innerHTML = escapeHtml(data.name);
-	cln.children[1].innerHTML = YesNo(data.isReady);
-	cln.children[2].innerHTML = YesNo(data.wantsRobber);
-	cln.children[3].innerHTML = YesNo(data.wantsHeli);
-	cln.children[4].innerHTML = escapeHtml(data.totalPoints);
-	cln.children[5].innerHTML = escapeHtml(parseFloat(data.wlr).toFixed(2));
+	cln.children[0].innerHTML = escapeHtml(data.id);
+	cln.children[1].innerHTML = escapeHtml(data.name);
+	cln.children[2].innerHTML = escapeHtml(data.col1 || "");
+	cln.children[3].innerHTML = escapeHtml(data.col2 || "");
+	cln.children[4].innerHTML = escapeHtml(data.col3 || "");
+	cln.children[5].innerHTML = escapeHtml(data.col4 || "");
 	list.appendChild(cln);
 }
-
-// LEADERBOARDS PANEL CONSTRUCTION
-function SetupLeaderboardsTable(data) {
-	var sections = document.querySelectorAll(".leaderboards-table-row");
-	var lb = document.querySelector(".leaderboardHeader");
-	sections.forEach((x) => {
-		x.remove();
-	});
-	if (data.length > 0) {
-		data.forEach((x) => {
-			CreateLeaderboardsRow(x);
-		});
-		if (lb.classList.contains("header-button-disabled")) {
-			lb.classList.toggle("header-button-disabled");
-			lb.disabled = false;
-		}
-	} else {
-		if (!lb.classList.contains("header-button-disabled")) {
-			lb.classList.toggle("header-button-disabled");
-			lb.disabled = true;
-		}
-	}
-}
-
-function CreateLeaderboardsRow(data) {
-	var template = document.querySelector(".leaderboards-table-row-template");
-	var list = template.parentElement;
-	var cln = template.cloneNode(true);
-	cln.classList.add("leaderboards-table-row");
-	cln.style.display = "flex";
-	cln.children[0].innerHTML = escapeHtml(data.name);
-	cln.children[1].innerHTML = escapeHtml(data.points);
-	cln.children[2].innerHTML = escapeHtml(parseFloat(data.wlr).toFixed(2));
-	cln.children[3].innerHTML = escapeHtml(data.copGames);
-	cln.children[4].innerHTML = escapeHtml(data.copWins);
-	cln.children[5].innerHTML = escapeHtml(data.chaseGames);
-	cln.children[6].innerHTML = escapeHtml(data.chaseWins);
-	list.appendChild(cln);
-}
-
-// VEHICLES CONSTRUCTION
-
-function SetupPlayerVehiclesPanels(rob, cop, cfxImg) {}
 
 // LANGUAGE SELECTOR
 

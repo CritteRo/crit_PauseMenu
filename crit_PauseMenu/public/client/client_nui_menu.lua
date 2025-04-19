@@ -7,21 +7,33 @@ local clientPlayer = {
 
 getbacktoNUI = false
 
+onlinePlayers = {
+    -- {id = src, name = PlayerName, col1 = "", col2 = "", col3 = "", col4 = ""}
+}
+
+RegisterNetEvent(Events.RECEIVE_PLAYERLIST, function(data)
+    onlinePlayers = data
+    debug("RECEIVE_PLAYERLIST :: Event Ran. "..json.encode(onlinePlayers))
+    if IsNuiFocused() then
+        SendNUIMessage({
+            type = 'UPDATE_PLAYER_LIST',
+            players = onlinePlayers
+        })
+    end
+end)
 
 function SetupNUI() -- This also runs when the NUI is open, and the language is changed.
-
+    local title = nil
+    local desc = nil
     SendNUIMessage({
         type = 'SETUP_DATA',
-        labels = nuiLocales[clientPlayer.lang],
-        overrideTitle = title,
-        overrideDesc = desc,
-        info = nuiInfo[clientPlayer.lang],
-        copVehicles = _copVehs,
-        robVehicles = _robVehs,
-        leaderboard = clientLeaderboard,
-        useCfxImg = Config.UseCfxImagesForNUI,
+        labels = nuiLocales[clientPlayer.lang], -- Button / table text labels.
+        info = nuiInfo[clientPlayer.lang], -- Components on the Information panel.
+        overrideTitle = title, -- Pause menu title, if you want to override it from the config.
+        overrideDesc = desc, -- Pause menu subtitle, if you want to override it from the config.
+        players = onlinePlayers, -- Player list
         languages = localesLanguages, -- from sh_locales.lua
-        currentLanguage = clientPlayer.lang,
+        currentLanguage = clientPlayer.lang, -- Menu language, needed, but you can have only one if you want.
     })
 end
 
@@ -92,6 +104,7 @@ end)
 
 Citizen.CreateThread(function()
     local minimap = RequestScaleformMovie("minimap") --get the minimap scaleform A.K.A minimap.gfx
+    resetMap()
     while true do
         if IsPauseMenuActive() and not clientPlayer.isMenuOpen then
             SetFrontendActive(false)
@@ -127,6 +140,9 @@ Citizen.CreateThread(function()
                 BeginScaleformMovieMethod(minimap, "SETUP_HEALTH_ARMOUR") -- starting the same function as the one we modified previously
                 ScaleformMovieMethodAddParamInt(3) -- overwriting whatever `healthType` the game has, with the GOLF one
                 EndScaleformMovieMethod() -- end the function, so the game can run it.
+            else
+                HideHudAndRadarThisFrame()
+                SetFakePausemapPlayerPositionThisFrame(9999.9,9999.9) -- Faking player location outside the map, because the fullscreen map sometimes flashes the player
             end
             if not IsPauseMenuActive() and getbacktoNUI == true then
                 if clientPlayer.currentPanel == "map" or clientPlayer.currentPanel == "settings" or clientPlayer.currentPanel == "gallery" or clientPlayer.currentPanel == "reditor" then
@@ -137,12 +153,12 @@ Citizen.CreateThread(function()
                     local forceInfo = false
                     if clientPlayer.currentPanel ~= "map" then
                         clientPlayer.currentPanel = "info"
-                        forceInfo = true
+                        forceInfo = ".info-panel"
                     end
                     SendNUIMessage({
                         type = 'NUI_TOGGLE',
                         viz = true,
-                        forceInfo = forceInfo
+                        forcePanel = forceInfo
                     })
                     getbacktoNUI = false
                 end

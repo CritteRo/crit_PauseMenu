@@ -15,55 +15,23 @@ serverPlayers = {
 
 function CreateNewPlayerData(source)
     local retval = {
-        name = GetPlayerName(source),
+        name = PreferredPlayerName(source),
         license = GetPlayerIdentifierByType(source, 'license'),
         lang = Config.defaultPlayerLanguage,
         isAdmin = IsPlayerAnAdmin(source),
-        isSuperAdmin = IsPlayerSuperAdmin(source)
-    }
-    local license = GetPlayerIdentifierByType(source, 'license')
-    if license then
-        local data = SQL_LoadPlayerData(license)
-        if type(data) == 'table' then
-            retval.name = data.name
-            retval.lang = data.lang
-            retval.isAdmin = IsPlayerAnAdmin(source)
-            retval.isSuperAdmin = IsPlayerSuperAdmin(source)
-            debug("PLAYER LOADED :: "..license)
-        else
-            SQL_SavePlayerData(retval)
-            debug("PLAYER CREATED :: "..license)
-        end
-    end
+        isSuperAdmin = IsPlayerSuperAdmin(source),
 
+        col1 = "", -- First Custom Column Data
+        col2 = "", -- Second Custom Column Data
+        col3 = "", -- Third Custom Column Data
+        col4 = "", -- Fourth Custom Column Data
+    }
     return retval
 end
 
 --===========================================================================================--
 --                                     PLAYER CHECKS                                         --
 --===========================================================================================--
-
--- Below function is used to verify if a source or user id, or any player identifier is valid.
--- The resource will give any input provided by the user or script as "input", and expects a valid player source return.
--- It is used by admins to find other players.
-function FindPlayer(input)
-    local retval = false
-    if type(tonumber(input)) == 'number' then
-        if GetPlayerPing(tonumber(input)) ~= 0 then
-            retval = tonumber(input)
-        end
-    elseif type(input) == 'string' then
-        for i,k in pairs(GetPlayers()) do
-            local s = string.lower(GetPlayerName(tonumber(k)))
-            local found, _= string.find(s, string.lower(input))
-            if found ~= nil then
-                retval = tonumber(k)
-                break
-            end
-        end
-    end
-    return retval -- The resource expects this to be a player source or `false`.
-end
 
 -- Below function is used to get the player's preferred name from a given player source. By default we used the regular GetPlayerName.
 -- The resource expects a string return.
@@ -104,6 +72,17 @@ function IsPlayerSuperAdmin(source)
     return false                                                        -- Just return false if player is not valid.
 end
 
+-- Below functions showcase how you can update a player's playerlist.
+function BuildPlayerList()
+    local playerlist = {}
+    for i,k in ipairs(GetPlayers()) do
+        local src = tonumber(k) -- global `source` is an int in Lua, but string in `GetPlayers()`. which means that main array also has Ints as sources.
+        table.insert(playerlist, {id = src, name = PreferredPlayerName(src), col1 = "", col2 = "", col3 = "", col4 = ""})
+    end
+    TriggerClientEvent(Events.RECEIVE_PLAYERLIST, -1, playerlist)
+    debug("BuildPlayerList() :: Event Ran.")
+end
+
 
 --===========================================================================================--
 --                                         EVENTS                                            --
@@ -114,6 +93,15 @@ AddEventHandler('playerJoining', function(oldID)
     Wait(1000) -- wait a moment for the public scripts to do their thing.
     serverPlayers[src] = CreateNewPlayerData(src)
     TriggerClientEvent(Events.UPDATE_CLIENT, src, serverPlayers[src])
+    BuildPlayerList()
+end)
+
+AddEventHandler('playerDropped', function(source, reason)
+    local src = source
+    if serverPlayers[src] ~= nil then
+        serverPlayers[src] = nil                                        --Cleanup array after the player leaves.
+    end
+    BuildPlayerList()
 end)
 
 AddEventHandler('onResourceStart', function(_name) --make sure we register ALL ONLINE players, in case the resource needs to be restarted while the server runs.
@@ -123,5 +111,6 @@ AddEventHandler('onResourceStart', function(_name) --make sure we register ALL O
             serverPlayers[src] = CreateNewPlayerData(src)
             TriggerClientEvent(Events.UPDATE_CLIENT, src, serverPlayers[src])
         end
+        BuildPlayerList()
     end
 end)

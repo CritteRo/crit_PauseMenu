@@ -38,6 +38,11 @@ function LoadMap()
     if aspectRatio > defaultAspectRatio then
         minimapOffset = ((defaultAspectRatio - aspectRatio) / 3.6) - 0.008
     end
+
+    SetBlipAlpha(GetNorthRadarBlip(), 0)
+    SetMinimapClipType(0)
+
+
     SetMinimapComponentPosition("bigmap", "I", "I", 0.55, 0.35, 0.364, 0.460416666)
     -- SetMinimapComponentPosition("bigmap", "I", "I", 0.311, 0.147, 0.996, 0.7968)
     SetMinimapComponentPosition("bigmap_mask", "I", "I", 0.301, 0.242, 0.676, 0.525)
@@ -51,6 +56,7 @@ function resetMap()
     SetMinimapComponentPosition("bigmap_mask", "L", "B", 0.015, 0.176, 0.176, 0.395)
     SetMinimapComponentPosition('bigmap_blur', 'L', 'B', -0.019, 0.022, 0.262, 0.464)
     SetRadarBigmapEnabled(false, false)
+    SetMinimapClipType(0)
     LockMinimapAngle(-1)
 end
 
@@ -109,7 +115,6 @@ function SetupSettings()
 
     local past, current,buttonId = GetPauseMenuSelectionData()
     while true do
-        SetFakePausemapPlayerPositionThisFrame(9999.9,9999.9)
         past, current,buttonId = GetPauseMenuSelectionData()
         if frontEndWhitelist[current] ~= nil or (current == -1 and frontEndWhitelist[past] ~= nil) then
             Wait(0)
