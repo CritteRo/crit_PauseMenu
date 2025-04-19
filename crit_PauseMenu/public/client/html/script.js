@@ -188,7 +188,7 @@ function togglePanel(el) {
 	toggleLeftSideElement(document.querySelector(".mapHeader"), false);
 	document.querySelector(".map-panel").style.display = "none";
 	toggleLeftSideElement(document.querySelector(".settingsHeader"), false);
-	toggleLeftSideElement(document.querySelector(".keyBindingsHeader"), false);
+	toggleLeftSideElement(document.querySelector(".galleryHeader"), false);
 
 	// Activate Correct panel
 	if (el && el.hasAttribute("panel")) {

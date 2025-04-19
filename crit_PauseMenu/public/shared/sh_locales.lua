@@ -5,12 +5,11 @@ localesLanguages = {
     -- Make sure all 3 of those arrays have the same language, and the same labels, otherwise it will start throwing errors.
     -- Having one or no language here will hide the language selector in UI. Only the default lang (from config) will be used.
     [1] = {"English", "en"},
-    [2] = {"Romana", "ro"},
 }
 
 nuiLocales = {
     ['en'] = {
-        MAIN_TITLE = "CritteR's Pause menu",
+        MAIN_TITLE = "CritteR's Pause Menu",
         MAIN_DESCRIPTION = "This description works as well.",
 
         READY_BUTTON = "DISCORD",
