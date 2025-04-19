@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<link href="style.css" rel="stylesheet" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>CritteR's Pause Menu</title>
+		<script type="text/javascript" src="script.js"></script>
+	</head>
+	<body style="opacity: 0; margin-top: 50vh">
+		<div class="main-container">
+			<div class="title-container">
+				<h1 class="main-title">Pause Menu</h1>
+				<p class="main-description">
+					Pause Menu Description - Lorem ipsum dolor sit amet
+					consectetur adipisicing elit. Laudantium voluptate dolorum
+					ratione, distinctio natus perferendis laborum nemo eveniet
+					dignissimos odit sunt vitae libero iure tempora, debitis ad
+					facilis quisquam recusandae?
+				</p>
+			</div>
+			<div class="content-container">
+				<div class="left-container">
+					<button
+						class="noselect left-container-button setReady socialsHeader"
+						onclick="togglePanel(this)"
+						optionID="socials"
+						leftSide="true"
+						panel=".socials-panel"
+						tabindex="0"
+					>
+						<span class="blur">SOCIALS</span>
+					</button>
+					<button
+						class="noselect left-container-button setRobber mapHeader"
+						onclick="togglePanel(this)"
+						optionID="map"
+						leftSide="true"
+						panel=".map-panel"
+						tabindex="0"
+					>
+						<span class="blur">MAP</span>
+					</button>
+					<button
+						class="noselect left-container-button setHeli settingsHeader"
+						onclick="togglePanel(this)"
+						optionID="settings"
+						leftSide="true"
+						panel=".empty-panel"
+						tabindex="0"
+					>
+						<span class="blur">SETTINGS</span>
+					</button>
+					<button
+						class="noselect left-container-button setCopVeh keyBindingsHeader"
+						onclick="togglePanel(this)"
+						optionID="social"
+						leftSide="true"
+						panel=".empty-panel"
+						tabindex="0"
+					>
+						<span class="blur">KEY BINDINGS</span>
+					</button>
+					<select
+						class="left-container-language-select"
+						style="display: block"
+						tabindex="0"
+					>
+						<option class="language-option-template" value="">
+							Language
+						</option>
+						<option
+							class="language-option-template language-option"
+							value="en"
+						>
+							🇬🇧 English
+						</option>
+					</select>
+				</div>
+				<div class="right-container">
+					<nav class="header-nav">
+						<button
+							class="noselect header-button infoHeader header-button-active"
+							onclick="togglePanel(this)"
+							optionID="info"
+							panel=".info-panel"
+							tabindex="0"
+						>
+							INFO
+						</button>
+						<button
+							class="noselect header-button playersHeader"
+							onclick="togglePanel(this)"
+							optionID="players"
+							panel=".players-panel"
+							tabindex="0"
+						>
+							PLAYERS
+						</button>
+						<button
+							class="noselect header-button leaderboardHeader closeMenu"
+							optionID="leavepause"
+							onclick="leaveLobby()"
+							tabindex="0"
+						>
+							CLOSE MENU
+						</button>
+						<button
+							class="noselect header-button leaveLobby"
+							onclick="togglePanel(this)"
+							optionID="leaveserver"
+							panel=".leave-server-panel"
+							tabindex="0"
+						>
+							LEAVE SERVER >>
+						</button>
+					</nav>
+					<section class="right-content">
+						<!-- INFO PANEL -->
+						<div
+							class="info-panel"
+							style="display: block"
+							tabindex="0"
+						>
+							<section
+								class="panel-section panel-section-title-template"
+								style="display: none"
+							>
+								<div class="flexbox">
+									<h2 class="panel-header-text"></h2>
+									<span class="panel-header-pill"></span>
+								</div>
+								<div class="line-divider"></div>
+							</section>
+							<section
+								class="panel-section panel-section-text-template"
+								style="display: none"
+							>
+								<h3 class="panel-header-text"></h3>
+								<p class="panel-text"></p>
+							</section>
+						</div>
+
+						<!-- SOCIALS PANEL -->
+						<div
+							class="socials-panel"
+							style="display: block"
+							tabindex="0"
+						>
+							<section
+								class="panel-section panel-section-title-template"
+								style="display: none"
+							>
+								<div class="flexbox">
+									<h2 class="panel-header-text"></h2>
+									<span class="panel-header-pill"></span>
+								</div>
+								<div class="line-divider"></div>
+							</section>
+							<section
+								class="panel-section panel-section-text-template"
+								style="display: none"
+							>
+								<h3 class="panel-header-text"></h3>
+								<p class="panel-text"></p>
+							</section>
+						</div>
+
+						<!-- ONLINE PLAYERS PANEL -->
+						<div
+							class="players-panel"
+							style="display: none"
+							tabindex="0"
+						>
+							<section class="players-table">
+								<table>
+									<tbody>
+										<tr class="players-table-header">
+											<th class="opth-id">ID</th>
+											<th class="opth-player-name">
+												PLAYER NAME
+											</th>
+											<th class="opth-level">LEVEL</th>
+											<th class="opth-rank">RANK</th>
+											<th class="opth-vip-rank">
+												VIP RANK
+											</th>
+											<th class="opth-faction">
+												FACTION
+											</th>
+										</tr>
+										<tr
+											class="players-table-row-template"
+											style="display: none"
+										>
+											<td>1</td>
+											<td>CritteR</td>
+											<td>420</td>
+											<td>Admin 5</td>
+											<td>VIP RUBY</td>
+											<td>Police Dept.</td>
+										</tr>
+									</tbody>
+								</table>
+							</section>
+						</div>
+
+						<!-- LEAVE SERVER PANEL -->
+						<div
+							class="leave-server-panel"
+							style="display: none"
+							tabindex="0"
+						>
+							<section
+								class="panel-section panel-section-text-template"
+								style="display: block"
+							>
+								<h3
+									class="panel-header-text leave-server-header-label"
+								>
+									Are you sure you want to leave?
+								</h3>
+							</section>
+							<section class="vehicle-grid">
+								<button
+									class="noselect cop-vehicle cop-vehicle-button-template"
+									onclick="toggleButton(this)"
+									optionID="changeCopVehicle"
+									model=""
+									style="display: none"
+								>
+									<span class="vehicle-blur"></span>
+								</button>
+							</section>
+						</div>
+
+						<!-- EMPTY PANEL -->
+						<div
+							class="empty-panel"
+							style="display: none"
+							tabindex="0"
+						></div>
+
+						<!-- MAP PANEL -->
+						<div
+							class="map-panel"
+							style="display: none"
+							tabindex="0"
+						>
+							<button
+								class="noselect"
+								onclick="openMap()"
+								style="
+									display: inline-block;
+									width: 100%;
+									height: auto;
+									justify-self: stretch;
+									align-self: stretch;
+									padding: auto;
+									opacity: 0;
+								"
+							>
+								<!-- button text -->
+							</button>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
