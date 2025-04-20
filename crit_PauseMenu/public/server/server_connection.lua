@@ -115,3 +115,28 @@ AddEventHandler('onResourceStart', function(_name) --make sure we register ALL O
         BuildPlayerList()
     end
 end)
+
+RegisterNetEvent(Events.CHANGE_MY_LANGUAGE, function(lang, overrideSrc)
+    local src = source
+    if overrideSrc ~= nil and src <= 0 then
+        if serverPlayers[overrideSrc] ~= nil and GetPlayerPing(overrideSrc) ~= 0 then
+            src = overrideSrc
+        end
+    end
+    if serverPlayers[src] ~= nil and nuiLocales[lang] ~= nil and nuiInfo[lang] ~= nil then
+        serverPlayers[src].lang = lang
+        TriggerClientEvent(Events.UPDATE_CLIENT, src, serverPlayers[src])
+    end
+end)
+
+RegisterNetEvent(Events.DISCONNECT_ME, function()
+    -- Why? Because the `disconnect` command is blocked in the client, for some reason :).
+    local src = source
+    local msg = "Disconnected"
+
+    if serverPlayers[src] ~= nil and nuiLocales[serverPlayers[src].lang] ~= nil and nuiLocales[serverPlayers[src].lang].DISCONNECT_MESSAGE ~= nil then
+        msg = nuiLocales[serverPlayers[src].lang].DISCONNECT_MESSAGE
+    end
+
+    DropPlayer(src, msg)
+end)

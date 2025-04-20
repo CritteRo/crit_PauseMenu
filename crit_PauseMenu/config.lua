@@ -25,5 +25,6 @@ Events = { -- List of events. Feel free to modify the names if you want.
     CHANGE_MY_LANGUAGE = "crit_PauseMenu.ChangeMyLanguage",
     RECEIVE_PLAYERLIST = "crit_PauseMenu.ReceivePlayerlist",
     SEND_OPTION_TO_SERVER = "crit_PauseMenu.SendOptionToServer",
-    UPDATE_CLIENT = "crit_PauseMenu.UpdateClient"
+    UPDATE_CLIENT = "crit_PauseMenu.UpdateClient",
+    DISCONNECT_ME = "crit_PauseMenu.DisconnectMe"
 }

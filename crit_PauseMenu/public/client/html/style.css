@@ -181,7 +181,7 @@ body {
 			rgba(0, 0, 0, 0.405),
 			rgba(0, 0, 0, 0.1)
 		),
-		url(img/ready.webp);
+		url(img/socials.webp);
 	background-size: cover;
 }
 
@@ -191,7 +191,7 @@ body {
 			rgba(0, 0, 0, 0.405),
 			rgba(0, 0, 0, 0.1)
 		),
-		url(img/setRobber.webp);
+		url(img/map.webp);
 	background-size: cover;
 }
 
@@ -201,7 +201,7 @@ body {
 			rgba(0, 0, 0, 0.405),
 			rgba(0, 0, 0, 0.1)
 		),
-		url(img/setHeli.webp);
+		url(img/settings.webp);
 	background-size: cover;
 }
 
@@ -211,7 +211,7 @@ body {
 			rgba(0, 0, 0, 0.405),
 			rgba(0, 0, 0, 0.1)
 		),
-		url(img/setCopVeh.webp);
+		url(img/gallery.webp);
 	background-size: cover;
 }
 
@@ -529,7 +529,7 @@ a:active {
 			rgba(0, 0, 0, 0.405),
 			rgba(0, 0, 0, 0.1)
 		),
-		url(img/setRobber.webp);
+		url(img/disconnect.webp);
 	background-size: cover;
 }
 
@@ -539,7 +539,7 @@ a:active {
 			rgba(0, 0, 0, 0.405),
 			rgba(0, 0, 0, 0.1)
 		),
-		url(img/setHeli.webp);
+		url(img/quit.webp);
 	background-size: cover;
 }
 

@@ -249,6 +249,11 @@ function setupLabels(data, overrideTitle, overrideDesc) {
 		data.BUTTON_LEAVE_SERVER
 	);
 
+	document.querySelector(".disconnectButton").children[0].innerHTML =
+		escapeHtml(data.BUTTON_DISCONNECT);
+	document.querySelector(".exitGameButton").children[0].innerHTML =
+		escapeHtml(data.BUTTON_QUIT_GAME);
+
 	// Online Players Table Headers
 	document.querySelector(".opth-id").innerHTML = escapeHtml(data.TBL_ID);
 	document.querySelector(".opth-player-name").innerHTML = escapeHtml(

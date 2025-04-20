@@ -1,10 +1,3 @@
-local clientPlayer = {
-    lang = "en",
-
-    isMenuOpen = false,
-    currentPanel = "info",
-}
-
 getbacktoNUI = false -- Needed to get back to the NUI after using a default pause page, like Settings or Gallery.
 firstOpen = true -- Needed in order to use the default panel settings. 
 
@@ -47,8 +40,6 @@ RegisterNUICallback('TOGGLE_PANEL', function(data, cb)
         SetupSettings()
     elseif data.option == "gallery" then
         SetupGallery()
-    elseif data.option == "reditor" then
-        SetupSettings()
     else
         resetMap()
     end
@@ -60,7 +51,7 @@ end)
 RegisterNUICallback('TOGGLE_BUTTON', function(data, cb)
     debug("TOGGLE_BUTTON :: Option: "..data.option)
     if data.option == "leaveServer" then
-        ExecuteCommand("disconnect")
+        TriggerServerEvent(Events.DISCONNECT_ME)
     elseif data.option == "quitGame" then
         PlaySoundFrontend(-1, "TOGGLE_ON", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
         SetNuiFocus(false, false)

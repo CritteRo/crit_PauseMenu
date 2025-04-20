@@ -21,6 +21,11 @@ nuiLocales = {
         BUTTON_CLOSE_MENU = "CLOSE MENU",
         BUTTON_LEAVE_SERVER = "LEAVE SERVER >>",
 
+        BUTTON_DISCONNECT = "Disconnect",
+        BUTTON_QUIT_GAME = "Quit Game",
+
+        DISCONNECT_MESSAGE = "Disconnected.",
+
         HEADER_LEAVE_SERVER = "Are you sure you want to quit? We'll miss you :(",
         HEADER_SOCIALS = "You can reach out to us here:",
 
