@@ -41,14 +41,14 @@ nuiLocales = {
 nuiInfo = {
     ['en'] = {
         -- {"title", "Title String", "Title pill, next to Title String"},
-        -- {"text", "Text Component Header", "Text Component Paragraph.", "ImageURL String."}
-        -- All components, except ImageURL, can contain HTML entities.
+        -- {"text", "Text Component Header", "Text Component Paragraph.", "ImageURL String.", "Link URL that transforms the image into a button"}
+        -- All components, except ImageURL and Link URL, can contain HTML entities.
 
         {"title", "INFORMATION PANEL", "v1.0.0"},
-        {'text', "Nostalgiq Romania", "Pause Menu Description - Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium voluptate dolorum ratione, distinctio natus perferendis laborum nemo eveniet dignissimos odit sunt vitae libero iure tempora, debitis ad facilis quisquam recusandae?"},
+        {'text', "Component Title", "Pause Menu Description - Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium voluptate dolorum ratione, distinctio natus perferendis laborum nemo eveniet dignissimos odit sunt vitae libero iure tempora, debitis ad facilis quisquam recusandae?"},
         {'text', "Video Showcase", '<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=-c6nXP1z5I_MhxZW" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'},
         {'text', "Test it out!", "The pause menu is currently hosted on Nostalgiq Romania RPG!", "https://critte.ro/share/img/fivem_banner.png", "https://nostalgiq.ro"},
-        {'title', "<a href = 'https://crittero.tebex.io/package/6763003' target='_blank'>Get it now on Tebex!</a>", ""},
+        {'title', "<a href = 'https://github.com/CritteRo/crit_PauseMenu' target='_blank'>Get it now on Github</a>, or check out my <a href = 'https://crittero.tebex.io/category/1788480' target='_blank'>paid scripts!</a>", ""},
     }
 }
 
