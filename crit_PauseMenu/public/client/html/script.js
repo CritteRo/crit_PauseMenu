@@ -444,13 +444,13 @@ window.onload = function () {
 	);
 	languageSelector.addEventListener("change", function () {
 		// console.log(languageSelector.value);
-		fetch(`https://${GetParentResourceName()}/SEND_TOGGLE_CHANGE`, {
+		fetch(`https://${GetParentResourceName()}/TOGGLE_BUTTON`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json; charset=UTF-8",
 			},
 			body: JSON.stringify({
-				type: "changeLang",
+				option: "changeLang",
 				lang: languageSelector.value,
 			}),
 		});
