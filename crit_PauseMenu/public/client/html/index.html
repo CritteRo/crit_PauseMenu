@@ -144,25 +144,29 @@
 						<!-- SOCIALS PANEL -->
 						<div
 							class="socials-panel"
-							style="display: block"
+							style="display: none"
 							tabindex="0"
 						>
 							<section
-								class="panel-section panel-section-title-template"
-								style="display: none"
-							>
-								<div class="flexbox">
-									<h2 class="panel-header-text"></h2>
-									<span class="panel-header-pill"></span>
-								</div>
-								<div class="line-divider"></div>
-							</section>
-							<section
 								class="panel-section panel-section-text-template"
-								style="display: none"
+								style="display: block"
 							>
-								<h3 class="panel-header-text"></h3>
-								<p class="panel-text"></p>
+								<h3
+									class="panel-header-text socials-header-label"
+								>
+									Social Links
+								</h3>
+							</section>
+							<section class="socials-grid">
+								<button
+									class="noselect socials-button-template"
+									onclick="toggleButton(this)"
+									optionID=""
+									url=""
+									style="display: none"
+								>
+									<span class="socials-blur"></span>
+								</button>
 							</section>
 						</div>
 
@@ -195,7 +199,7 @@
 										</tr>
 										<tr
 											class="players-table-row-template"
-											style="display: flex"
+											style="display: none"
 										>
 											<td>1</td>
 											<td>CritteR</td>
@@ -225,15 +229,24 @@
 									Are you sure you want to leave?
 								</h3>
 							</section>
-							<section class="vehicle-grid">
+							<section class="leave-grid">
 								<button
-									class="noselect cop-vehicle cop-vehicle-button-template"
+									class="noselect leave-button disconnectButton"
 									onclick="toggleButton(this)"
-									optionID="changeCopVehicle"
+									optionID="leaveServer"
 									model=""
-									style="display: none"
+									style="display: block"
 								>
-									<span class="vehicle-blur"></span>
+									<span class="leave-blur">Disconnect</span>
+								</button>
+								<button
+									class="noselect leave-button exitGameButton"
+									onclick="toggleButton(this)"
+									optionID="quitGame"
+									model=""
+									style="display: block"
+								>
+									<span class="leave-blur">Quite Game</span>
 								</button>
 							</section>
 						</div>

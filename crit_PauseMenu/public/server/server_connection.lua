@@ -106,6 +106,7 @@ end)
 
 AddEventHandler('onResourceStart', function(_name) --make sure we register ALL ONLINE players, in case the resource needs to be restarted while the server runs.
     if _name == GetCurrentResourceName() then
+        Wait(1000)
         for _,_src in ipairs(GetPlayers()) do
             local src = tonumber(_src) -- GetPlayers() returns sources as strings instead of integers. Lua usually handles them in the backend, but they are still different var types.
             serverPlayers[src] = CreateNewPlayerData(src)

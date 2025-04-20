@@ -22,7 +22,7 @@ nuiLocales = {
         BUTTON_LEAVE_SERVER = "LEAVE SERVER >>",
 
         HEADER_LEAVE_SERVER = "Are you sure you want to quit? We'll miss you :(",
-        HEADER_SOCIALS = "You can reach out to use here:",
+        HEADER_SOCIALS = "You can reach out to us here:",
 
         TBL_ID = "ID",
         TBL_PLAYER_NAME = "PLAYER NAME",

@@ -5,7 +5,8 @@ local clientPlayer = {
     currentPanel = "info",
 }
 
-getbacktoNUI = false
+getbacktoNUI = false -- Needed to get back to the NUI after using a default pause page, like Settings or Gallery.
+firstOpen = true -- Needed in order to use the default panel settings. 
 
 onlinePlayers = {
     -- {id = src, name = PlayerName, col1 = "", col2 = "", col3 = "", col4 = ""}
@@ -32,6 +33,7 @@ function SetupNUI() -- This also runs when the NUI is open, and the language is 
         overrideTitle = title, -- Pause menu title, if you want to override it from the config.
         overrideDesc = desc, -- Pause menu subtitle, if you want to override it from the config.
         players = onlinePlayers, -- Player list
+        socialButtons = Config.socialButtons, -- Social buttons panel.
         languages = localesLanguages, -- from sh_locales.lua
         currentLanguage = clientPlayer.lang, -- Menu language, needed, but you can have only one if you want.
     })
@@ -49,6 +51,29 @@ RegisterNUICallback('TOGGLE_PANEL', function(data, cb)
         SetupSettings()
     else
         resetMap()
+    end
+    clientPlayer.currentPanel = data.option
+    cb({["ok"]=true})
+    return 
+end)
+
+RegisterNUICallback('TOGGLE_BUTTON', function(data, cb)
+    debug("TOGGLE_BUTTON :: Option: "..data.option)
+    if data.option == "leaveServer" then
+        ExecuteCommand("disconnect")
+    elseif data.option == "quitGame" then
+        PlaySoundFrontend(-1, "TOGGLE_ON", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+        SetNuiFocus(false, false)
+        ReleaseControlOfFrontend()
+        SendNUIMessage({
+            type = 'NUI_TOGGLE',
+            viz = false
+        })
+        SetFrontendActive(false)
+        TriggerScreenblurFadeOut(500)
+        clientPlayer.isMenuOpen = false
+        AnimpostfxStop("MP_OrbitalCannon")
+        QuitGame()
     end
     clientPlayer.currentPanel = data.option
     cb({["ok"]=true})
@@ -104,7 +129,9 @@ end)
 
 Citizen.CreateThread(function()
     local minimap = RequestScaleformMovie("minimap") --get the minimap scaleform A.K.A minimap.gfx
-    resetMap()
+    SetRadarBigmapEnabled(true, false)      --]
+    Wait(0)                                 --] This whole nonsense is to not fuck up the other parts of the minimap... not sure why, but it works.
+    SetRadarBigmapEnabled(false, false)     --]
     while true do
         if IsPauseMenuActive() and not clientPlayer.isMenuOpen then
             SetFrontendActive(false)
@@ -117,11 +144,15 @@ Citizen.CreateThread(function()
             TakeControlOfFrontend()
 
             SetupNUI()
-
-            SendNUIMessage({
+            local nuiData = {
                 type = 'NUI_TOGGLE',
                 viz = true
-            })
+            }
+            if firstOpen then
+                nuiData.forcePanel = Config.defaultPanel
+                firstOpen = false
+            end
+            SendNUIMessage(nuiData)
             debug(clientPlayer.currentPanel)
             if clientPlayer.currentPanel == "map" then
                 LoadMap()
@@ -153,7 +184,7 @@ Citizen.CreateThread(function()
                     local forceInfo = false
                     if clientPlayer.currentPanel ~= "map" then
                         clientPlayer.currentPanel = "info"
-                        forceInfo = ".info-panel"
+                        forceInfo = ".infoHeader"
                     end
                     SendNUIMessage({
                         type = 'NUI_TOGGLE',

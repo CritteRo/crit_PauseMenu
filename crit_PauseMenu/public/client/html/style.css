@@ -327,7 +327,8 @@ body {
 }
 
 .info-panel,
-.leave-server-panel {
+.leave-server-panel,
+.socials-panel {
 	width: 100%;
 	height: 100%;
 	background-color: rgba(10, 10, 10, 0.75);
@@ -339,6 +340,11 @@ body {
 	overflow-y: scroll;
 	font-size: 1.8rem;
 	color: #fafafa;
+}
+
+.leave-server-panel {
+	display: flex;
+	flex-direction: column;
 }
 
 .map-panel {
@@ -360,24 +366,28 @@ body {
 
 /* INFO PANEL & LEAVE SERVER PANEL */
 .info-panel h3,
-.leave-server-panel h3 {
+.leave-server-panel h3,
+.socials-panel h3 {
 	margin-bottom: 2rem;
 	font-size: 2.4rem;
 	text-decoration: none;
 }
 
 .info-panel h3:has(> a:link),
-.leave-server-panel h3:has(> a:link) {
+.leave-server-panel h3:has(> a:link),
+.socials-panel h3:has(> a:link) {
 	text-decoration: none;
 }
 
 .info-panel p,
-.leave-server-panel p {
+.leave-server-panel p,
+.socials-panel p {
 	margin-bottom: 2rem;
 }
 
 .info-panel img,
-.leave-server-panel img {
+.leave-server-panel img,
+.socials-panel img {
 	width: 100%;
 	transition: all 200ms;
 }
@@ -423,15 +433,15 @@ a:active {
 	text-decoration: underline solid;
 }
 
-/* VEHICLE PANEL */
+/* SOCIALS PANEL */
 
-.vehicle-grid {
+.socials-grid {
 	display: grid;
 	gap: 1rem;
 	grid-template-columns: repeat(4, 1fr);
 }
 
-.vehicle-button {
+.socials-button {
 	display: inline-block;
 	width: auto;
 	min-height: 18rem;
@@ -442,16 +452,17 @@ a:active {
 	color: #fafafa;
 	background-color: #0a0a0a;
 	background-size: cover;
+	background-position: center;
 	font-size: 2.2rem;
 	font-weight: 600;
 	cursor: pointer;
 }
 
-.vehicle-button:hover {
+.socials-button:hover {
 	box-shadow: 0 0 0.3rem 0.2rem rgba(21, 136, 217, 0.6);
 }
 
-.vehicle-blur {
+.socials-blur {
 	width: 100%;
 	height: 100%;
 	display: flex;
@@ -461,8 +472,75 @@ a:active {
 	transition: all 100ms;
 }
 
-.vehicle-button:hover .vehicle-blur {
+.socials-button:hover .socials-blur {
 	backdrop-filter: blur(5px);
+}
+
+/* LEAVE SERVER PANEL */
+
+.leave-grid {
+	display: grid;
+	gap: 1rem;
+	grid-template-columns: repeat(2, 1fr);
+	justify-content: stretch;
+	height: 100%;
+}
+
+.leave-button {
+	display: inline-block;
+	width: auto;
+	height: auto;
+	min-height: 18rem;
+	min-width: 12rem;
+	font-size: 1.6rem;
+	transition: all 200ms;
+	border: none;
+	color: #fafafa;
+	background-color: #0a0a0a;
+	background-size: cover;
+	background-position: center;
+	font-size: 4.6rem;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.leave-button:hover {
+	box-shadow: 0 0 0.3rem 0.2rem rgba(21, 136, 217, 0.6);
+	font-size: 5rem;
+}
+
+.leave-blur {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1rem;
+	transition: all 100ms;
+}
+
+.leave-button:hover .leave-blur {
+	backdrop-filter: blur(5px);
+}
+
+.disconnectButton {
+	background-image: linear-gradient(
+			to top,
+			rgba(0, 0, 0, 0.405),
+			rgba(0, 0, 0, 0.1)
+		),
+		url(img/setRobber.webp);
+	background-size: cover;
+}
+
+.exitGameButton {
+	background-image: linear-gradient(
+			to top,
+			rgba(0, 0, 0, 0.405),
+			rgba(0, 0, 0, 0.1)
+		),
+		url(img/setHeli.webp);
+	background-size: cover;
 }
 
 /* PLAYER TABLE */

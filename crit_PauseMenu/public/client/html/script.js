@@ -36,6 +36,9 @@ window.addEventListener("message", (event) => {
 		if (typeof event.data.players !== "undefined") {
 			SetupOnlinePlayersTable(event.data.players);
 		}
+		if (typeof event.data.socialButtons != "undefined") {
+			SetupSocialsPanel(event.data.socialButtons);
+		}
 	}
 });
 
@@ -74,24 +77,27 @@ function ToggleNUI(viz) {
 function toggleButton(el) {
 	if (waitingForUiUpdate === false) {
 		var option = "NO_OPTION";
-		var model = "NO_MODEL";
-		var refID = "NO_REF_ID";
 		if (el.hasAttribute("optionID")) {
 			option = el.getAttribute("optionID");
+			if (option === "social") {
+				window.invokeNative("openUrl", el.getAttribute("url"));
+			} else {
+				fetch(`https://${GetParentResourceName()}/TOGGLE_BUTTON`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json; charset=UTF-8",
+					},
+					body: JSON.stringify({
+						option: option,
+					}),
+				});
+			}
 		} else {
-			// console.log("no attri");
+			console.log(
+				"toggleButton :: missing optionID attribute for: " +
+					el.innerHTML
+			);
 		}
-		if (el.hasAttribute("model")) {
-			model = el.getAttribute("model");
-		} else {
-			// console.log("no model attri");
-		}
-		if (el.hasAttribute("refID")) {
-			refID = el.getAttribute("refID");
-		} else {
-			// console.log("no model attri");
-		}
-		waitingForUiUpdate = true;
 	}
 }
 
@@ -132,6 +138,8 @@ function togglePanel(el) {
 
 	document.querySelector(".info-panel").style.display = "none";
 	toggleHeaderElement(document.querySelector(".infoHeader"), false);
+	document.querySelector(".socials-panel").style.display = "none";
+	toggleLeftSideElement(document.querySelector(".socialsHeader"), false);
 	document.querySelector(".players-panel").style.display = "none";
 	toggleHeaderElement(document.querySelector(".playersHeader"), false);
 	document.querySelector(".leave-server-panel").style.display = "none";
@@ -153,6 +161,9 @@ function togglePanel(el) {
 		if (el.getAttribute("panel") === ".map-panel") {
 			document.querySelector(el.getAttribute("panel")).style.display =
 				"grid";
+		} else if (el.getAttribute("panel") === ".leave-server-panel") {
+			document.querySelector(el.getAttribute("panel")).style.display =
+				"flex";
 		} else {
 			document.querySelector(el.getAttribute("panel")).style.display =
 				"block";
@@ -238,7 +249,7 @@ function setupLabels(data, overrideTitle, overrideDesc) {
 		data.BUTTON_LEAVE_SERVER
 	);
 
-	// //Online Players Table Headers
+	// Online Players Table Headers
 	document.querySelector(".opth-id").innerHTML = escapeHtml(data.TBL_ID);
 	document.querySelector(".opth-player-name").innerHTML = escapeHtml(
 		data.TBL_PLAYER_NAME
@@ -247,6 +258,14 @@ function setupLabels(data, overrideTitle, overrideDesc) {
 	document.querySelector(".opth-col2").innerHTML = escapeHtml(data.TBL_COL2);
 	document.querySelector(".opth-col3").innerHTML = escapeHtml(data.TBL_COL3);
 	document.querySelector(".opth-col4").innerHTML = escapeHtml(data.TBL_COL4);
+
+	// Header Panel Titles
+	document.querySelector(".socials-header-label").innerHTML = escapeHtml(
+		data.HEADER_SOCIALS
+	);
+	document.querySelector(".leave-server-header-label").innerHTML = escapeHtml(
+		data.HEADER_LEAVE_SERVER
+	);
 }
 
 // INFO PANEL CONSTRUCTION
@@ -339,6 +358,34 @@ function CreateOnlinePlayerRow(data) {
 	cln.children[3].innerHTML = escapeHtml(data.col2 || "");
 	cln.children[4].innerHTML = escapeHtml(data.col3 || "");
 	cln.children[5].innerHTML = escapeHtml(data.col4 || "");
+	list.appendChild(cln);
+}
+
+// SOCIALS CONSTRUCTION
+
+function SetupSocialsPanel(data) {
+	var sections = document.querySelectorAll(".socials-button");
+	sections.forEach((x) => {
+		x.remove();
+	});
+	data.forEach((x) => {
+		CreateSocialButton(x);
+	});
+}
+
+function CreateSocialButton(data) {
+	var template = document.querySelector(".socials-button-template");
+	var list = template.parentElement;
+	var cln = template.cloneNode(true);
+	cln.classList.add("socials-button");
+	cln.style.display = "inline-block";
+	cln.style.backgroundImage =
+		"linear-gradient(to top,rgba(0, 0, 0, 0.605),rgba(0, 0, 0, 0.4)),url(" +
+		(data.urlImg || "") +
+		")";
+	cln.setAttribute("optionID", "social");
+	cln.setAttribute("url", data.url);
+	cln.children[0].innerHTML = escapeHtml(data.name);
 	list.appendChild(cln);
 }
 
