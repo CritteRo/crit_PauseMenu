@@ -65,9 +65,10 @@ RegisterNUICallback('TOGGLE_BUTTON', function(data, cb)
         clientPlayer.isMenuOpen = false
         AnimpostfxStop("MP_OrbitalCannon")
         QuitGame()
-    elseif data.option == "changeLang" then
+    elseif data.option == "changeLang" and clientPlayer.lang ~= data.lang then
         TriggerServerEvent(Events.CHANGE_MY_LANGUAGE, data.lang)
         PlaySoundFrontend(-1, "TOGGLE_ON", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+        debug('TOGGLE_BUTTON :: lang :: clientPlayer: '..clientPlayer.lang.." vs. NUI: "..data.lang)
         debug('TOGGLE_BUTTON :: lang Change')
     end
     if data.option ~= "changeLang" then

@@ -581,6 +581,7 @@ a:active {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	align-items: center;
 }
 
 .players-panel tbody td {
