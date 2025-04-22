@@ -70,7 +70,9 @@ RegisterNUICallback('TOGGLE_BUTTON', function(data, cb)
         PlaySoundFrontend(-1, "TOGGLE_ON", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
         debug('TOGGLE_BUTTON :: lang Change')
     end
-    clientPlayer.currentPanel = data.option
+    if data.option ~= "changeLang" then
+        clientPlayer.currentPanel = data.option
+    end
     cb({["ok"]=true})
     return 
 end)
