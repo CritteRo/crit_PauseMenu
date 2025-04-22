@@ -145,6 +145,7 @@ Citizen.CreateThread(function()
             }
             if firstOpen then
                 nuiData.forcePanel = Config.defaultPanel
+                clientPlayer.currentPanel = headerCSStoPanelLua[Config.defaultPanel] or "info"
                 firstOpen = false
             end
             SendNUIMessage(nuiData)

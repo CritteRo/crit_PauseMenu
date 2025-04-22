@@ -25,6 +25,16 @@ local frontEndWhitelist = {
     [151] = true
 }
 
+headerCSStoPanelLua = {
+    ['.mapHeader'] = "map",
+    ['.infoHeader'] = "info",
+    ['.socialsHeader'] = "socials",
+    ['.settingsHeader'] = "settings",
+    ['.galleryHeader'] = "gallery",
+    ['.playersHeader'] = "players",
+    ['.leaveLobby'] = "leaveserver"
+}
+
 local lockTabs = {-1000,0,1,2,3}
 
 
