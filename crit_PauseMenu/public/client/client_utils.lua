@@ -66,6 +66,7 @@ function resetMap()
     SetMinimapComponentPosition("bigmap_mask", "L", "B", 0.015, 0.176, 0.176, 0.395)
     SetMinimapComponentPosition('bigmap_blur', 'L', 'B', -0.019, 0.022, 0.262, 0.464)
     SetRadarBigmapEnabled(false, false)
+    SetBlipAlpha(GetNorthRadarBlip(), 255)
     SetMinimapClipType(0)
     LockMinimapAngle(-1)
 end
