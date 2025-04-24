@@ -122,7 +122,7 @@ Citizen.CreateThread(function()
     Wait(0)                                 --] This whole nonsense is to not fuck up the other parts of the minimap... not sure why, but it works.
     SetRadarBigmapEnabled(false, false)     --]
     while true do
-        if IsPauseMenuActive() and not clientPlayer.isMenuOpen then
+        if IsPauseMenuActive() and GetCurrentFrontendMenuVersion() == GetHashKey("FE_MENU_VERSION_MP_PAUSE") and not clientPlayer.isMenuOpen then
             SetFrontendActive(false)
             if GetProfileSetting(204) == 1 then
                 minimapState = IsRadarHidden()
