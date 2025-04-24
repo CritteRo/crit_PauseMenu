@@ -5,6 +5,9 @@ onlinePlayers = {
     -- {id = src, name = PlayerName, col1 = "", col2 = "", col3 = "", col4 = ""}
 }
 
+minimapState = false
+bigMapState = {false, false}
+
 RegisterNetEvent(Events.RECEIVE_PLAYERLIST, function(data)
     onlinePlayers = data
     debug("RECEIVE_PLAYERLIST :: Event Ran. "..json.encode(onlinePlayers))
@@ -35,7 +38,12 @@ end
 RegisterNUICallback('TOGGLE_PANEL', function(data, cb)
     debug("TOGGLE_PANEL :: Panel: "..data.panel.." / Option: "..data.option)
     if data.option == "map" then
-        LoadMap()
+        if GetProfileSetting(204) == 1 then
+            LoadMap()
+        else
+            ToggleFullscreenMap()
+        end
+        
     elseif data.option == "settings" then
         SetupSettings()
     elseif data.option == "gallery" then
@@ -43,7 +51,9 @@ RegisterNUICallback('TOGGLE_PANEL', function(data, cb)
     else
         resetMap()
     end
-    clientPlayer.currentPanel = data.option
+    if (GetProfileSetting(204) == 1 and data.option == "map") or data.option ~= "map" then
+        clientPlayer.currentPanel = data.option
+    end
     cb({["ok"]=true})
     return 
 end)
@@ -81,26 +91,7 @@ end)
 RegisterNUICallback('TOGGLE_PANEL_MAP', function(data, cb)
     debug("TOGGLE_PANEL_MAP :: Option: "..data.option)
     if data.option == "map" then
-        getbacktoNUI = false
-        SetNuiFocus(false, false)
-        ReleaseControlOfFrontend()
-        SendNUIMessage({
-            type = 'NUI_TOGGLE',
-            viz = false
-        })
-        ActivateFrontendMenu("FE_MENU_VERSION_MP_PAUSE", false, -1) --Opens a frontend-type menu. Scaleform is already loaded, but can be changed.
-        while not IsPauseMenuActive() or IsPauseMenuRestarting() do --Making extra-sure that the frontend menu is fully loaded
-            Wait(0)
-        end
-        PauseMenuceptionGoDeeper(0) --Setting up the context menu of the Pause Menu. For other frontend menus, use https://docs.fivem.net/natives/?_0xDD564BDD0472C936
-        PauseMenuceptionTheKick()
-        while not IsControlJustPressed(2,202) and not IsControlJustPressed(2,200) and not IsControlJustPressed(2,199) do --Waiting for any of frontend cancel buttons to be hit. Kinda slow but whatever.
-            Wait(0)
-        end
-        getbacktoNUI = true
-        PauseMenuceptionTheKick() --doesn't really work, but the native's name is funny.
-        SetFrontendActive(false) --Force-closing the entire frontend menu. I wanted a simple back button, but R* forced my hand.
-        clientPlayer.currentPanel = data.option
+        ToggleFullscreenMap()
     else
         resetMap()
     end
@@ -133,7 +124,12 @@ Citizen.CreateThread(function()
     while true do
         if IsPauseMenuActive() and not clientPlayer.isMenuOpen then
             SetFrontendActive(false)
+            if GetProfileSetting(204) == 1 then
+                minimapState = IsRadarHidden()
+                bigMapState = {IsBigmapActive(), IsBigmapFull()}
+            end
             clientPlayer.isMenuOpen = true
+            
             AnimpostfxPlay("MP_OrbitalCannon", 1000, true)
             SetNuiFocus(true, true)
             SetNuiFocusKeepInput(false)
@@ -148,7 +144,10 @@ Citizen.CreateThread(function()
             }
             if firstOpen then
                 nuiData.forcePanel = Config.defaultPanel
-                clientPlayer.currentPanel = headerCSStoPanelLua[Config.defaultPanel] or "info"
+                if nuiData.forcePanel == ".mapHeader" and GetProfileSetting(204) == 0 then
+                    nuiData.forcePanel = ".infoHeader"
+                end
+                clientPlayer.currentPanel = headerCSStoPanelLua[nuiData.forcePanel] or "info"
                 firstOpen = false
             end
             SendNUIMessage(nuiData)
@@ -170,6 +169,10 @@ Citizen.CreateThread(function()
                 BeginScaleformMovieMethod(minimap, "SETUP_HEALTH_ARMOUR") -- starting the same function as the one we modified previously
                 ScaleformMovieMethodAddParamInt(3) -- overwriting whatever `healthType` the game has, with the GOLF one
                 EndScaleformMovieMethod() -- end the function, so the game can run it.
+
+                if IsRadarHidden() and GetProfileSetting(204) == 1 then
+                    DisplayRadar(true)
+                end
             else
                 HideHudAndRadarThisFrame()
                 SetFakePausemapPlayerPositionThisFrame(9999.9,9999.9) -- Faking player location outside the map, because the fullscreen map sometimes flashes the player
@@ -181,7 +184,7 @@ Citizen.CreateThread(function()
                     TriggerScreenblurFadeIn(1)
                     TakeControlOfFrontend()
                     local forceInfo = false
-                    if clientPlayer.currentPanel ~= "map" then
+                    if GetProfileSetting(204) == 0 or clientPlayer.currentPanel ~= "map" then
                         clientPlayer.currentPanel = "info"
                         forceInfo = ".infoHeader"
                     end

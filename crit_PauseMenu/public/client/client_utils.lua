@@ -51,7 +51,7 @@ function LoadMap()
 
     SetBlipAlpha(GetNorthRadarBlip(), 0)
     SetMinimapClipType(0)
-
+    DisplayRadar(true)
 
     SetMinimapComponentPosition("bigmap", "I", "I", 0.55, 0.35, 0.364, 0.460416666)
     -- SetMinimapComponentPosition("bigmap", "I", "I", 0.311, 0.147, 0.996, 0.7968)
@@ -66,9 +66,35 @@ function resetMap()
     SetMinimapComponentPosition("bigmap_mask", "L", "B", 0.015, 0.176, 0.176, 0.395)
     SetMinimapComponentPosition('bigmap_blur', 'L', 'B', -0.019, 0.022, 0.262, 0.464)
     SetRadarBigmapEnabled(false, false)
+    Wait(0)
+    SetRadarBigmapEnabled(bigMapState[1], bigMapState[2])
     SetBlipAlpha(GetNorthRadarBlip(), 255)
     SetMinimapClipType(0)
     LockMinimapAngle(-1)
+    DisplayRadar(not minimapState)
+end
+
+function ToggleFullscreenMap()
+    getbacktoNUI = false
+    clientPlayer.currentPanel = "map"
+    SetNuiFocus(false, false)
+    ReleaseControlOfFrontend()
+    SendNUIMessage({
+        type = 'NUI_TOGGLE',
+        viz = false
+    })
+    ActivateFrontendMenu("FE_MENU_VERSION_MP_PAUSE", false, -1) --Opens a frontend-type menu. Scaleform is already loaded, but can be changed.
+    while not IsPauseMenuActive() or IsPauseMenuRestarting() do --Making extra-sure that the frontend menu is fully loaded
+        Wait(0)
+    end
+    PauseMenuceptionGoDeeper(0) --Setting up the context menu of the Pause Menu. For other frontend menus, use https://docs.fivem.net/natives/?_0xDD564BDD0472C936
+    PauseMenuceptionTheKick()
+    while not IsControlJustPressed(2,202) and not IsControlJustPressed(2,200) and not IsControlJustPressed(2,199) do --Waiting for any of frontend cancel buttons to be hit. Kinda slow but whatever.
+        Wait(0)
+    end
+    getbacktoNUI = true
+    PauseMenuceptionTheKick() --doesn't really work, but the native's name is funny.
+    SetFrontendActive(false) --Force-closing the entire frontend menu. I wanted a simple back button, but R* forced my hand.
 end
 
 function SetupSettings()
