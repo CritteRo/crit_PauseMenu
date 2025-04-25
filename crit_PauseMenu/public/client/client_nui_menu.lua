@@ -47,8 +47,9 @@ RegisterNUICallback('TOGGLE_PANEL', function(data, cb)
     elseif data.option == "settings" then
         SetupSettings()
     elseif data.option == "gallery" then
-        -- SetupStats()
         SetupGallery()
+    -- elseif data.option == "players" then
+    --     SetupStats()
     else
         resetMap()
     end
@@ -179,7 +180,7 @@ Citizen.CreateThread(function()
                 SetFakePausemapPlayerPositionThisFrame(9999.9,9999.9) -- Faking player location outside the map, because the fullscreen map sometimes flashes the player
             end
             if not IsPauseMenuActive() and getbacktoNUI == true then
-                if clientPlayer.currentPanel == "map" or clientPlayer.currentPanel == "settings" or clientPlayer.currentPanel == "gallery" or clientPlayer.currentPanel == "reditor" then
+                if clientPlayer.currentPanel == "map" or clientPlayer.currentPanel == "settings" or clientPlayer.currentPanel == "gallery" or clientPlayer.currentPanel == "players" then
                     SetNuiFocus(true, true)
                     SetNuiFocusKeepInput(false)
                     TriggerScreenblurFadeIn(1)
