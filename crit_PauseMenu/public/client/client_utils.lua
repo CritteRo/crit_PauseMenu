@@ -1,12 +1,15 @@
 local frontEndWhitelist = {
     [3] = true,
     [6] = true,
+    [10] = true,
     [22] = true,
     [23] = true,
     [24] = true,
     [33] = true,
+    [50] = true,
     [51] = true,
     [52] = true,
+    [58] = true,
     [93] = true,
     [94] = true,
     [95] = true,
@@ -35,7 +38,7 @@ headerCSStoPanelLua = {
     ['.leaveLobby'] = "leaveserver"
 }
 
-local lockTabs = {-1000,0,1,2,3}
+local lockTabs = {-1000,0,1,2}
 
 
 function LoadMap()
@@ -213,6 +216,72 @@ function SetupGallery()
     local past, current,buttonId = GetPauseMenuSelectionData()
     while true do
         SetFakePausemapPlayerPositionThisFrame(9999.9,9999.9)
+        past, current,buttonId = GetPauseMenuSelectionData()
+        if frontEndWhitelist[current] ~= nil or (current == -1 and frontEndWhitelist[past] ~= nil) then
+            Wait(0)
+        else
+            break
+        end
+    end
+    SetFrontendActive(false)
+    getbacktoNUI = true
+end
+
+function SetupStats()
+    resetMap()
+    getbacktoNUI = false
+    SetNuiFocus(false, false)
+    ReleaseControlOfFrontend()
+    SendNUIMessage({
+        type = 'NUI_TOGGLE',
+        viz = false
+    })
+    ActivateFrontendMenu(GetHashKey("FE_MENU_VERSION_MP_PAUSE"), false, 10) --Opens a frontend-type menu. Scaleform is already loaded, but can be changed.
+    while not IsPauseMenuActive() or IsPauseMenuRestarting() do --Making extra-sure that the frontend menu is fully loaded
+        Wait(0)
+    end
+    PauseMenuceptionGoDeeper(10) --Setting up the context menu of the Pause Menu. For other frontend menus, use https://docs.fivem.net/natives/?_0xDD564BDD0472C936
+    
+    BeginScaleformMovieMethodOnFrontendHeader("SHIFT_CORONA_DESC")
+    ScaleformMovieMethodAddParamBool(true); --shifts the column headers a bit down.
+    ScaleformMovieMethodAddParamBool(false); --This disables the colored strip above column headers.
+    EndScaleformMovieMethod();
+    Citizen.Wait(0)
+    
+    BeginScaleformMovieMethodOnFrontendHeader("SET_HEADER_TITLE")
+    ScaleformMovieMethodAddParamTextureNameString("Stats");       -- // Set the title
+    ScaleformMovieMethodAddParamBool(false);        -- // purpose unknown, is always 0 in decompiled scripts.
+    ScaleformMovieMethodAddParamTextureNameString("");    --// set the subtitle.
+    ScaleformMovieMethodAddParamBool(false);          --// setting this to true distorts the header... for some reason. On normal MP_PAUSE menu, it makes the title a bit smaller.
+    EndScaleformMovieMethod();
+    Citizen.Wait(10)
+
+    BeginScaleformMovieMethodOnFrontendHeader("SHOW_HEADING_DETAILS") --disables right side player mockshot and cash / bank
+    ScaleformMovieMethodAddParamBool(false); --toggle
+    EndScaleformMovieMethod()
+    Citizen.Wait(0)
+
+    BeginScaleformMovieMethodOnFrontendHeader("SET_HEADER_ARROWS_VISIBLE") --disables right side player mockshot and cash / bank
+    ScaleformMovieMethodAddParamBool(false); --toggle
+    ScaleformMovieMethodAddParamBool(false); --toggle
+    EndScaleformMovieMethod()
+    Citizen.Wait(0)
+
+    for i,k in pairs(lockTabs) do
+        BeginScaleformMovieMethodOnFrontendHeader("LOCK_MENU_ITEM") --disables the column headers
+        ScaleformMovieMethodAddParamInt(k); --toggle
+        ScaleformMovieMethodAddParamBool(true); --toggle
+        EndScaleformMovieMethod()
+        Citizen.Wait(0)
+    end
+
+    BeginScaleformMovieMethodOnFrontendHeader("SHOW_MENU") --disables the column headers
+    ScaleformMovieMethodAddParamBool(false); --toggle
+    EndScaleformMovieMethod()
+    Citizen.Wait(0)
+
+    local past, current,buttonId = GetPauseMenuSelectionData()
+    while true do
         past, current,buttonId = GetPauseMenuSelectionData()
         if frontEndWhitelist[current] ~= nil or (current == -1 and frontEndWhitelist[past] ~= nil) then
             Wait(0)

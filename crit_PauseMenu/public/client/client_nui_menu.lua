@@ -47,6 +47,7 @@ RegisterNUICallback('TOGGLE_PANEL', function(data, cb)
     elseif data.option == "settings" then
         SetupSettings()
     elseif data.option == "gallery" then
+        -- SetupStats()
         SetupGallery()
     else
         resetMap()
