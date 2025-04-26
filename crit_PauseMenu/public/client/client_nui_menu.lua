@@ -175,6 +175,9 @@ Citizen.CreateThread(function()
                 if IsRadarHidden() and GetProfileSetting(204) == 1 then
                     DisplayRadar(true)
                 end
+                if not IsBigmapActive() then
+                    SetRadarBigmapEnabled(true, false)
+                end
             else
                 HideHudAndRadarThisFrame()
                 SetFakePausemapPlayerPositionThisFrame(9999.9,9999.9) -- Faking player location outside the map, because the fullscreen map sometimes flashes the player
