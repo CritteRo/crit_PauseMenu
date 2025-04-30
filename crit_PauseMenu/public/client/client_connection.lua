@@ -19,3 +19,7 @@ RegisterNetEvent(Events.UPDATE_CLIENT, function(data)
         clientPlayer.lang = data.lang
     end
 end)
+
+function IsPauseMenuOpen()
+    return clientPlayer.isMenuOpen
+end

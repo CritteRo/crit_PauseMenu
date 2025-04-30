@@ -32,6 +32,10 @@ files {
     'public/client/html/img/*.webp',
 }
 
+exports {
+    'IsPauseMenuOpen'
+}
+
 escrow_ignore {
     'fxmanifest.lua',
     'config.lua',
