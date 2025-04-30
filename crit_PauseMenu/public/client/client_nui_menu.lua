@@ -43,15 +43,12 @@ RegisterNUICallback('TOGGLE_PANEL', function(data, cb)
         else
             ToggleFullscreenMap()
         end
-        
     elseif data.option == "settings" then
         SetupSettings()
     elseif data.option == "gallery" then
         SetupGallery()
     -- elseif data.option == "players" then
     --     SetupStats()
-    else
-        resetMap()
     end
     if (GetProfileSetting(204) == 1 and data.option == "map") or data.option ~= "map" then
         clientPlayer.currentPanel = data.option
@@ -95,10 +92,10 @@ RegisterNUICallback('TOGGLE_PANEL_MAP', function(data, cb)
     if data.option == "map" then
         ToggleFullscreenMap()
     else
-        resetMap()
+        -- resetMap()
     end
     cb({["ok"]=true})
-    return 
+    return
 end)
 
 RegisterNUICallback('REQUEST_LEAVE_LOBBY', function(data, cb)
@@ -114,23 +111,26 @@ RegisterNUICallback('REQUEST_LEAVE_LOBBY', function(data, cb)
     clientPlayer.isMenuOpen = false
     AnimpostfxStop("MP_OrbitalCannon")
     resetMap()
+    TriggerEvent('crit_PauseMenu.PauseMenuClosed')
     cb({["ok"]=true})
     return 
 end)
 
 Citizen.CreateThread(function()
     local minimap = RequestScaleformMovie("minimap") --get the minimap scaleform A.K.A minimap.gfx
+    Wait(200) -- Waiting a bit for other scripts to do their thing.
     SetRadarBigmapEnabled(true, false)      --]
     Wait(0)                                 --] This whole nonsense is to not fuck up the other parts of the minimap... not sure why, but it works.
     SetRadarBigmapEnabled(false, false)     --]
     while true do
         if IsPauseMenuActive() and GetCurrentFrontendMenuVersion() == GetHashKey("FE_MENU_VERSION_MP_PAUSE") and not clientPlayer.isMenuOpen then
             SetFrontendActive(false)
+            Wait(10)
             if GetProfileSetting(204) == 1 then
+                debug("Opening Pause Menu :: Saving minimap state")
                 minimapState = IsRadarHidden()
                 bigMapState = {IsBigmapActive(), IsBigmapFull()}
             end
-            clientPlayer.isMenuOpen = true
             
             AnimpostfxPlay("MP_OrbitalCannon", 1000, true)
             SetNuiFocus(true, true)
@@ -154,12 +154,16 @@ Citizen.CreateThread(function()
             end
             SendNUIMessage(nuiData)
             debug(clientPlayer.currentPanel)
+            Wait(10)
+            clientPlayer.isMenuOpen = true
             if clientPlayer.currentPanel == "map" then
                 LoadMap()
-                Wait(100)
-                LoadMap()   -- He's making his list, He's loading it twice,
-                            -- He's waiting 100ms because Scaleforms are a b*tch and don't want to cooperate.
+                -- Wait(100)
+                -- LoadMap()   -- He's making his list, He's loading it twice,
+                --             -- He's waiting 100ms because Scaleforms are a b*tch and don't want to cooperate.
             end
+
+            TriggerEvent('crit_PauseMenu.PauseMenuOpened')
         end
 
         if clientPlayer.isMenuOpen then
@@ -192,6 +196,8 @@ Citizen.CreateThread(function()
                     if GetProfileSetting(204) == 0 or clientPlayer.currentPanel ~= "map" then
                         clientPlayer.currentPanel = "info"
                         forceInfo = ".infoHeader"
+                    else
+                        LoadMap()
                     end
                     SendNUIMessage({
                         type = 'NUI_TOGGLE',

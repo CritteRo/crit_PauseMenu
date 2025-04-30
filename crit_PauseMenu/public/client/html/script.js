@@ -1,4 +1,5 @@
 var waitingForUiUpdate = false;
+var allowExit = true;
 var labels = {};
 
 function escapeHtml(str) {
@@ -68,6 +69,10 @@ function ToggleNUI(viz) {
 	if (viz) {
 		x.style.opacity = 1.0;
 		x.style.marginTop = "0vh";
+		allowExit = false;
+		setTimeout(function () {
+			allowExit = true;
+		}, 200);
 	} else {
 		x.style.opacity = 0.0;
 		x.style.marginTop = "60vh";
@@ -183,13 +188,15 @@ function togglePanel(el) {
 }
 
 function leaveLobby() {
-	fetch(`https://${GetParentResourceName()}/REQUEST_LEAVE_LOBBY`, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json; charset=UTF-8",
-		},
-		body: JSON.stringify({}),
-	});
+	if (allowExit === true) {
+		fetch(`https://${GetParentResourceName()}/REQUEST_LEAVE_LOBBY`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json; charset=UTF-8",
+			},
+			body: JSON.stringify({}),
+		});
+	}
 }
 
 function openMap() {

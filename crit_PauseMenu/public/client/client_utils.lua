@@ -55,7 +55,8 @@ function LoadMap()
     SetBlipAlpha(GetNorthRadarBlip(), 0)
     SetMinimapClipType(0)
     DisplayRadar(true)
-
+    local crds = GetEntityCoords(PlayerPedId())
+    SetFakePausemapPlayerPositionThisFrame(crds.x, crds.y)
     SetMinimapComponentPosition("bigmap", "I", "I", 0.55, 0.35, 0.364, 0.460416666)
     -- SetMinimapComponentPosition("bigmap", "I", "I", 0.311, 0.147, 0.996, 0.7968)
     SetMinimapComponentPosition("bigmap_mask", "I", "I", 0.301, 0.242, 0.676, 0.525)
@@ -70,11 +71,15 @@ function resetMap()
     SetMinimapComponentPosition('bigmap_blur', 'L', 'B', -0.019, 0.022, 0.262, 0.464)
     SetRadarBigmapEnabled(false, false)
     Wait(0)
+    local crds = GetEntityCoords(PlayerPedId())
+    SetFakePausemapPlayerPositionThisFrame(crds.x, crds.y)
     SetRadarBigmapEnabled(bigMapState[1], bigMapState[2])
+    -- SetRadarBigmapEnabled(false, false)
     SetBlipAlpha(GetNorthRadarBlip(), 255)
     SetMinimapClipType(0)
     LockMinimapAngle(-1)
     DisplayRadar(not minimapState)
+    debug("resetMap() :: Reseting the bigmap")
 end
 
 function ToggleFullscreenMap()
@@ -101,7 +106,7 @@ function ToggleFullscreenMap()
 end
 
 function SetupSettings()
-    resetMap()
+    -- resetMap()
     getbacktoNUI = false
     SetNuiFocus(false, false)
     ReleaseControlOfFrontend()
@@ -167,7 +172,7 @@ function SetupSettings()
 end
 
 function SetupGallery()
-    resetMap()
+    -- resetMap()
     getbacktoNUI = false
     SetNuiFocus(false, false)
     ReleaseControlOfFrontend()
@@ -228,7 +233,7 @@ function SetupGallery()
 end
 
 function SetupStats()
-    resetMap()
+    -- resetMap()
     getbacktoNUI = false
     SetNuiFocus(false, false)
     ReleaseControlOfFrontend()
