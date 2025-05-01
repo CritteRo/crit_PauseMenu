@@ -285,7 +285,9 @@ function SetupStats()
     BeginScaleformMovieMethodOnFrontendHeader("SHOW_MENU") --disables the column headers
     ScaleformMovieMethodAddParamBool(false); --toggle
     EndScaleformMovieMethod()
-    Citizen.Wait(0)
+    
+    Citizen.Wait(100) -- Slow PCs might need a longer wait. I can't get the exact moment of when the pause menu is fully ready.
+    SetControlNormal(0, 187, 1.0)
 
     local past, current,buttonId = GetPauseMenuSelectionData()
     while true do
