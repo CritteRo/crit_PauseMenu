@@ -13,6 +13,7 @@ local frontEndWhitelist = {
     [93] = true,
     [94] = true,
     [95] = true,
+    [96] = true,
     [131] = true,
     [136] = true,
     [137] = true,
@@ -25,7 +26,7 @@ local frontEndWhitelist = {
     [148] = true,
     [149] = true,
     [150] = true,
-    [151] = true
+    [151] = true,
 }
 
 headerCSStoPanelLua = {
@@ -161,9 +162,10 @@ function SetupSettings()
     local past, current,buttonId = GetPauseMenuSelectionData()
     while true do
         past, current,buttonId = GetPauseMenuSelectionData()
-        if frontEndWhitelist[current] ~= nil or (current == -1 and frontEndWhitelist[past] ~= nil) then
+        if frontEndWhitelist[current] ~= nil or ((current <= -1 or current > 1000)--[[current sub-menu is -1, or is not a sub-menu, but R* is too dum-dum to use another native]]  and frontEndWhitelist[past] ~= nil) then
             Wait(0)
         else
+            debug("SetupSettings() :: returned with: current = "..current.." / past = "..past)
             break
         end
     end
@@ -222,7 +224,7 @@ function SetupGallery()
     while true do
         SetFakePausemapPlayerPositionThisFrame(9999.9,9999.9)
         past, current,buttonId = GetPauseMenuSelectionData()
-        if frontEndWhitelist[current] ~= nil or (current == -1 and frontEndWhitelist[past] ~= nil) then
+        if frontEndWhitelist[current] ~= nil or ((current <= -1 or current > 1000)--[[current sub-menu is -1, or is not a sub-menu, but R* is too dum-dum to use another native]] and frontEndWhitelist[past] ~= nil) then
             Wait(0)
         else
             break
@@ -288,7 +290,7 @@ function SetupStats()
     local past, current,buttonId = GetPauseMenuSelectionData()
     while true do
         past, current,buttonId = GetPauseMenuSelectionData()
-        if frontEndWhitelist[current] ~= nil or (current == -1 and frontEndWhitelist[past] ~= nil) then
+        if frontEndWhitelist[current] ~= nil or ((current <= -1 or current > 1000)--[[current sub-menu is -1, or is not a sub-menu, but R* is too dum-dum to use another native]]  and frontEndWhitelist[past] ~= nil) then
             Wait(0)
         else
             break
