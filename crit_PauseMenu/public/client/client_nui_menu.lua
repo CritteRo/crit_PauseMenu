@@ -109,8 +109,8 @@ RegisterNUICallback('REQUEST_LEAVE_LOBBY', function(data, cb)
     SetFrontendActive(false)
     TriggerScreenblurFadeOut(500)
     clientPlayer.isMenuOpen = false
+    resetMap() -- Reseting the minimap after closing the menu. This causes a problem for slower systems, sometimes, but otherwise it won't work.
     AnimpostfxStop("MP_OrbitalCannon")
-    resetMap()
     TriggerEvent('crit_PauseMenu.PauseMenuClosed')
     cb({["ok"]=true})
     return 
@@ -125,13 +125,7 @@ Citizen.CreateThread(function()
     while true do
         if IsPauseMenuActive() and GetCurrentFrontendMenuVersion() == GetHashKey("FE_MENU_VERSION_MP_PAUSE") and not clientPlayer.isMenuOpen then
             SetFrontendActive(false)
-            Wait(10)
-            if GetProfileSetting(204) == 1 then
-                debug("Opening Pause Menu :: Saving minimap state")
-                minimapState = IsRadarHidden()
-                bigMapState = {IsBigmapActive(), IsBigmapFull()}
-            end
-            
+            debug("OPENING THE MAP :: "..tostring(not minimapState).. " / "..tostring(bigMapState[1]).. " / "..tostring(bigMapState[2]))
             AnimpostfxPlay("MP_OrbitalCannon", 1000, true)
             SetNuiFocus(true, true)
             SetNuiFocusKeepInput(false)
@@ -154,9 +148,10 @@ Citizen.CreateThread(function()
             end
             SendNUIMessage(nuiData)
             debug(clientPlayer.currentPanel)
-            Wait(10)
+            -- Wait(10)
             clientPlayer.isMenuOpen = true
             if clientPlayer.currentPanel == "map" then
+                Wait(10)
                 LoadMap()
                 -- Wait(100)
                 -- LoadMap()   -- He's making his list, He's loading it twice,
@@ -167,6 +162,9 @@ Citizen.CreateThread(function()
         end
 
         if clientPlayer.isMenuOpen then
+            DisableControlAction(0, 202, true)
+            DisableControlAction(0, 200, true)
+            DisableControlAction(0, 199, true)
             if clientPlayer.currentPanel == "map" then
                 BeginScaleformMovieMethod(minimap, "SETUP_HEALTH_ARMOUR") -- starting the same function as the one we modified previously
                 ScaleformMovieMethodAddParamInt(3) -- overwriting whatever `healthType` the game has, with the GOLF one
@@ -208,6 +206,32 @@ Citizen.CreateThread(function()
                 end
             end
         end
-        Citizen.Wait(1) -- 1ms wait to confuse the resmon and keep the kids happy.
+        Citizen.Wait(3) -- 1ms wait to confuse the resmon and keep the kids happy.
+    end
+end)
+
+-- ... R* decided to return 1 and false for the minimap check natives ...
+-- We are translating all the possibilities. Just in case.
+local translateToBool = {
+    [0] = false,
+    [false] = false,
+    ["0"] = false,
+    [1] = true,
+    [true] = true,
+    ["1"] = true
+}
+
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(10) -- We don't need to run this all the time.
+        if clientPlayer.isMenuOpen == false and not IsPauseMenuActive() then
+            Citizen.Wait(10) -- MANDATORY WAIT. OMG I HATE THIS RESOURCE.
+            if GetProfileSetting(204) == 1 then
+                minimapState = translateToBool[IsRadarHidden()] or false
+                bigMapState = {translateToBool[IsBigmapActive()] or false, translateToBool[IsBigmapFull()] or false}
+
+                -- print("MINIMAP THREAD :: "..tostring(not minimapState).. " / "..tostring(bigMapState[1]).. " / "..tostring(bigMapState[2]))
+            end
+        end
     end
 end)

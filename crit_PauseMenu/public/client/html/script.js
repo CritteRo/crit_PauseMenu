@@ -1,5 +1,5 @@
 var waitingForUiUpdate = false;
-var allowExit = true;
+var allowExit = false;
 var labels = {};
 
 function escapeHtml(str) {
@@ -76,6 +76,7 @@ function ToggleNUI(viz) {
 	} else {
 		x.style.opacity = 0.0;
 		x.style.marginTop = "60vh";
+		allowExit = false;
 	}
 }
 

@@ -41,7 +41,6 @@ headerCSStoPanelLua = {
 
 local lockTabs = {-1000,0,1,2}
 
-
 function LoadMap()
     Wait(10)
     local defaultAspectRatio = 1920 / 1080       -- Base resolution.
@@ -70,17 +69,26 @@ function resetMap()
     SetMinimapComponentPosition("bigmap", "L", "B", -0.003975, 0.022, 0.364, 0.460416666)
     SetMinimapComponentPosition("bigmap_mask", "L", "B", 0.015, 0.176, 0.176, 0.395)
     SetMinimapComponentPosition('bigmap_blur', 'L', 'B', -0.019, 0.022, 0.262, 0.464)
+    DisplayRadar(not minimapState)
     SetRadarBigmapEnabled(false, false)
-    Wait(0)
+    Wait(1)
     local crds = GetEntityCoords(PlayerPedId())
     SetFakePausemapPlayerPositionThisFrame(crds.x, crds.y)
     SetRadarBigmapEnabled(bigMapState[1], bigMapState[2])
+    debug("resetMap() :: "..tostring(not minimapState).. " / "..tostring(bigMapState[1]).. " / "..tostring(bigMapState[2]))
     -- SetRadarBigmapEnabled(false, false)
     SetBlipAlpha(GetNorthRadarBlip(), 255)
     SetMinimapClipType(0)
     LockMinimapAngle(-1)
-    DisplayRadar(not minimapState)
     debug("resetMap() :: Reseting the bigmap")
+end
+
+function IsEscapePressed()
+    local retval = false
+    if IsControlJustPressed(2,202) or IsControlJustPressed(2,200) or IsControlJustPressed(2,199) or IsDisabledControlJustPressed(2,202) or IsDisabledControlJustPressed(2,200) or IsDisabledControlJustPressed(2,199) then
+        retval = true
+    end
+    return retval
 end
 
 function ToggleFullscreenMap()
@@ -98,7 +106,7 @@ function ToggleFullscreenMap()
     end
     PauseMenuceptionGoDeeper(0) --Setting up the context menu of the Pause Menu. For other frontend menus, use https://docs.fivem.net/natives/?_0xDD564BDD0472C936
     PauseMenuceptionTheKick()
-    while not IsControlJustPressed(2,202) and not IsControlJustPressed(2,200) and not IsControlJustPressed(2,199) do --Waiting for any of frontend cancel buttons to be hit. Kinda slow but whatever.
+    while not IsEscapePressed() do --Waiting for any of frontend cancel buttons to be hit. Kinda slow but whatever.
         Wait(0)
     end
     getbacktoNUI = true
