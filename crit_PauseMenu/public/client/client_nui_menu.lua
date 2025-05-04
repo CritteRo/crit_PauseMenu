@@ -162,9 +162,11 @@ Citizen.CreateThread(function()
         end
 
         if clientPlayer.isMenuOpen then
-            DisableControlAction(0, 202, true)
-            DisableControlAction(0, 200, true)
-            DisableControlAction(0, 199, true)
+            if not IsPauseMenuActive() then
+                DisableControlAction(0, 202, true)
+                DisableControlAction(0, 200, true)
+                DisableControlAction(0, 199, true)
+            end
             if clientPlayer.currentPanel == "map" then
                 BeginScaleformMovieMethod(minimap, "SETUP_HEALTH_ARMOUR") -- starting the same function as the one we modified previously
                 ScaleformMovieMethodAddParamInt(3) -- overwriting whatever `healthType` the game has, with the GOLF one
