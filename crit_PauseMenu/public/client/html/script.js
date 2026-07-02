@@ -1,12 +1,6 @@
-var waitingForUiUpdate = false;
-var allowExit = false;
-var labels = {};
-
-function escapeHtml(str) {
-	var div = document.createElement("div");
-	div.appendChild(document.createTextNode(str));
-	return div.innerHTML;
-}
+let waitingForUiUpdate = false;
+let allowExit = false;
+let labels = {};
 
 window.addEventListener("message", (event) => {
 	if (event.data.type === "NUI_TOGGLE") {
@@ -52,7 +46,7 @@ document.addEventListener("click", (e) => {
 		// Check if the <a> tag is part of the Info Panel.
 		var parent = target.closest(".info-panel");
 		if (parent) {
-			e.preventDefault(); // tell the browser not to respond to the link click
+			e.preventDefault();
 			window.invokeNative("openUrl", target.getAttribute("href"));
 		}
 	}
@@ -65,7 +59,7 @@ window.addEventListener("keydown", (event) => {
 });
 
 function ToggleNUI(viz) {
-	var x = document.body;
+	const x = document.body;
 	if (viz) {
 		x.style.opacity = 1.0;
 		x.style.marginTop = "0vh";
@@ -82,7 +76,7 @@ function ToggleNUI(viz) {
 
 function toggleButton(el) {
 	if (waitingForUiUpdate === false) {
-		var option = "NO_OPTION";
+		let option = "NO_OPTION";
 		if (el.hasAttribute("optionID")) {
 			option = el.getAttribute("optionID");
 			if (option === "social") {
@@ -108,7 +102,7 @@ function toggleButton(el) {
 }
 
 function toggleElement(el, toggle) {
-	var x = el.children[0];
+	const x = el.children[0];
 	if (x) {
 		if (x.classList.contains("activeBtn") && !toggle) {
 			x.classList.toggle("activeBtn");
@@ -213,78 +207,19 @@ function openMap() {
 }
 
 function setupLabels(data, overrideTitle, overrideDesc) {
-	// Title and Subtitle
-	if (overrideTitle && overrideTitle != "") {
-		document.querySelector(".main-title").innerHTML =
-			escapeHtml(overrideTitle);
-	} else {
-		document.querySelector(".main-title").innerHTML = escapeHtml(
-			data.MAIN_TITLE
-		);
-	}
-
-	if (overrideDesc && overrideDesc != "") {
-		document.querySelector(".main-description").innerHTML =
-			escapeHtml(overrideDesc);
-	} else {
-		document.querySelector(".main-description").innerHTML = escapeHtml(
-			data.MAIN_DESCRIPTION
-		);
-	}
-
-	// Header buttons
-	document.querySelector(".socialsHeader").children[0].innerHTML = escapeHtml(
-		data.BUTTON_SOCIALS
-	);
-	document.querySelector(".mapHeader").children[0].innerHTML = escapeHtml(
-		data.BUTTON_MAP
-	);
-	document.querySelector(".settingsHeader").children[0].innerHTML =
-		escapeHtml(data.BUTTON_SETTINGS);
-	document.querySelector(".galleryHeader").children[0].innerHTML = escapeHtml(
-		data.BUTTON_GALLERY
-	);
-	document.querySelector(".infoHeader").innerHTML = escapeHtml(
-		data.BUTTON_INFORMATION
-	);
-	document.querySelector(".playersHeader").innerHTML = escapeHtml(
-		data.BUTTON_PLAYER_LIST
-	);
-	document.querySelector(".closeMenu").innerHTML = escapeHtml(
-		data.BUTTON_CLOSE_MENU
-	);
-	document.querySelector(".leaveLobby").innerHTML = escapeHtml(
-		data.BUTTON_LEAVE_SERVER
-	);
-
-	document.querySelector(".disconnectButton").children[0].innerHTML =
-		escapeHtml(data.BUTTON_DISCONNECT);
-	document.querySelector(".exitGameButton").children[0].innerHTML =
-		escapeHtml(data.BUTTON_QUIT_GAME);
-
-	// Online Players Table Headers
-	document.querySelector(".opth-id").innerHTML = escapeHtml(data.TBL_ID);
-	document.querySelector(".opth-player-name").innerHTML = escapeHtml(
-		data.TBL_PLAYER_NAME
-	);
-	document.querySelector(".opth-col1").innerHTML = escapeHtml(data.TBL_COL1);
-	document.querySelector(".opth-col2").innerHTML = escapeHtml(data.TBL_COL2);
-	document.querySelector(".opth-col3").innerHTML = escapeHtml(data.TBL_COL3);
-	document.querySelector(".opth-col4").innerHTML = escapeHtml(data.TBL_COL4);
-
-	// Header Panel Titles
-	document.querySelector(".socials-header-label").innerHTML = escapeHtml(
-		data.HEADER_SOCIALS
-	);
-	document.querySelector(".leave-server-header-label").innerHTML = escapeHtml(
-		data.HEADER_LEAVE_SERVER
-	);
+    const ELEMENTS = document.querySelectorAll("[data-label]");
+    ELEMENTS.forEach( (el) => {
+        const LABEL = el.dataset.label;
+        if (data[LABEL]) el.textContent = data[LABEL];
+        if (LABEL === "MAIN_TITLE" && overrideTitle) el.textContent = overrideTitle;
+        if (LABEL === "MAIN_DESCRIPTION" && overrideDesc) el.textContent = overrideDesc;
+    })
 }
 
 // INFO PANEL CONSTRUCTION
 
 function setInfoPanelData(data) {
-	var sections = document.querySelectorAll(".panel-section-data");
+	const sections = document.querySelectorAll(".panel-section-data");
 	sections.forEach((x) => {
 		x.remove();
 	});
@@ -350,7 +285,7 @@ function createInfoPanelSection(data) {
 // PLAYER PANEL CONSTRUCTION
 
 function SetupOnlinePlayersTable(data) {
-	var sections = document.querySelectorAll(".players-table-row");
+	const sections = document.querySelectorAll(".players-table-row");
 	sections.forEach((x) => {
 		x.remove();
 	});
@@ -365,12 +300,12 @@ function CreateOnlinePlayerRow(data) {
 	var cln = template.cloneNode(true);
 	cln.classList.add("players-table-row");
 	cln.style.display = "flex";
-	cln.children[0].innerHTML = escapeHtml(data.id);
-	cln.children[1].innerHTML = escapeHtml(data.name);
-	cln.children[2].innerHTML = escapeHtml(data.col1 || "");
-	cln.children[3].innerHTML = escapeHtml(data.col2 || "");
-	cln.children[4].innerHTML = escapeHtml(data.col3 || "");
-	cln.children[5].innerHTML = escapeHtml(data.col4 || "");
+	cln.children[0].textContent = data.id;
+	cln.children[1].textContent = data.name;
+	cln.children[2].textContent = (data.col1 || "");
+	cln.children[3].textContent = (data.col2 || "");
+	cln.children[4].textContent = (data.col3 || "");
+	cln.children[5].textContent = (data.col4 || "");
 	list.appendChild(cln);
 }
 
@@ -392,13 +327,10 @@ function CreateSocialButton(data) {
 	var cln = template.cloneNode(true);
 	cln.classList.add("socials-button");
 	cln.style.display = "inline-block";
-	cln.style.backgroundImage =
-		"linear-gradient(to top,rgba(0, 0, 0, 0.605),rgba(0, 0, 0, 0.4)),url(" +
-		(data.urlImg || "") +
-		")";
+	cln.style.backgroundImage = `linear-gradient(to top,rgba(0, 0, 0, 0.605),rgba(0, 0, 0, 0.4)),url("${data.urlImg || ""}")`;
 	cln.setAttribute("optionID", "social");
 	cln.setAttribute("url", data.url);
-	cln.children[0].innerHTML = escapeHtml(data.name);
+	cln.children[0].textContent = data.name;
 	list.appendChild(cln);
 }
 
@@ -442,14 +374,12 @@ function CreateLanguageOption(data) {
 	var cln = template.cloneNode(true);
 	cln.classList.add("language-option");
 	cln.setAttribute("value", data[1]);
-	cln.innerHTML = escapeHtml(data[0]);
+	cln.textContent = data[0];
 	list.appendChild(cln);
 }
 
 window.onload = function () {
-	var languageSelector = document.querySelector(
-		".left-container-language-select"
-	);
+	const languageSelector = document.querySelector(".left-container-language-select");
 	languageSelector.addEventListener("change", function () {
 		// console.log(languageSelector.value);
 		fetch(`https://${GetParentResourceName()}/TOGGLE_BUTTON`, {

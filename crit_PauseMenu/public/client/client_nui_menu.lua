@@ -9,6 +9,7 @@ minimapState = false
 bigMapState = {false, false}
 
 RegisterNetEvent(Events.RECEIVE_PLAYERLIST, function(data)
+    if not Config.isPauseMenuEnabled then return end
     onlinePlayers = data
     debug("RECEIVE_PLAYERLIST :: Event Ran. "..json.encode(onlinePlayers))
     if IsNuiFocused() then
@@ -20,6 +21,7 @@ RegisterNetEvent(Events.RECEIVE_PLAYERLIST, function(data)
 end)
 
 function SetupNUI() -- This also runs when the NUI is open, and the language is changed.
+    if not Config.isPauseMenuEnabled then return end
     local title = nil
     local desc = nil
     SendNUIMessage({
@@ -36,6 +38,7 @@ function SetupNUI() -- This also runs when the NUI is open, and the language is 
 end
 
 RegisterNUICallback('TOGGLE_PANEL', function(data, cb)
+    if not Config.isPauseMenuEnabled then return end
     debug("TOGGLE_PANEL :: Panel: "..data.panel.." / Option: "..data.option)
     if data.option == "map" then
         if GetProfileSetting(204) == 1 then
@@ -47,8 +50,8 @@ RegisterNUICallback('TOGGLE_PANEL', function(data, cb)
         SetupSettings()
     elseif data.option == "gallery" then
         SetupGallery()
-    -- elseif data.option == "players" then
-    --     SetupStats()
+    elseif data.option == "players" then
+        SetupStats()
     end
     if (GetProfileSetting(204) == 1 and data.option == "map") or data.option ~= "map" then
         clientPlayer.currentPanel = data.option
@@ -58,6 +61,7 @@ RegisterNUICallback('TOGGLE_PANEL', function(data, cb)
 end)
 
 RegisterNUICallback('TOGGLE_BUTTON', function(data, cb)
+    if not Config.isPauseMenuEnabled then return end
     debug("TOGGLE_BUTTON :: Option: "..data.option)
     if data.option == "leaveServer" then
         TriggerServerEvent(Events.DISCONNECT_ME)
@@ -88,6 +92,7 @@ RegisterNUICallback('TOGGLE_BUTTON', function(data, cb)
 end)
 
 RegisterNUICallback('TOGGLE_PANEL_MAP', function(data, cb)
+    if not Config.isPauseMenuEnabled then return end
     debug("TOGGLE_PANEL_MAP :: Option: "..data.option)
     if data.option == "map" then
         ToggleFullscreenMap()
@@ -123,6 +128,7 @@ Citizen.CreateThread(function()
     Wait(0)                                 --] This whole nonsense is to not fuck up the other parts of the minimap... not sure why, but it works.
     SetRadarBigmapEnabled(false, false)     --]
     while true do
+        if not Config.isPauseMenuEnabled then goto skip end
         if IsPauseMenuActive() and GetCurrentFrontendMenuVersion() == GetHashKey("FE_MENU_VERSION_MP_PAUSE") and not clientPlayer.isMenuOpen then
             SetFrontendActive(false)
             debug("OPENING THE MAP :: "..tostring(not minimapState).. " / "..tostring(bigMapState[1]).. " / "..tostring(bigMapState[2]))
@@ -147,15 +153,11 @@ Citizen.CreateThread(function()
                 firstOpen = false
             end
             SendNUIMessage(nuiData)
-            debug(clientPlayer.currentPanel)
-            -- Wait(10)
+            debug("OPENING THE MAP :: The current panel is "..clientPlayer.currentPanel)
             clientPlayer.isMenuOpen = true
             if clientPlayer.currentPanel == "map" then
                 Wait(10)
                 LoadMap()
-                -- Wait(100)
-                -- LoadMap()   -- He's making his list, He's loading it twice,
-                --             -- He's waiting 100ms because Scaleforms are a b*tch and don't want to cooperate.
             end
 
             TriggerEvent('crit_PauseMenu.PauseMenuOpened')
@@ -208,7 +210,8 @@ Citizen.CreateThread(function()
                 end
             end
         end
-        Citizen.Wait(3) -- 1ms wait to confuse the resmon and keep the kids happy.
+        ::skip::
+        Citizen.Wait(3)
     end
 end)
 
@@ -224,9 +227,15 @@ local translateToBool = {
 }
 
 Citizen.CreateThread(function()
+    local setting = GetResourceKvpString(Config.menuToggleKVP);
+    if setting ~= nil and Config.allowPlayerToDisableMenu then
+        Config.isPauseMenuEnabled = (setting == "true")
+        debug("TOGGLE PAUSE MENU :: Pause menu setting has been loaded as "..tostring(Config.isPauseMenuEnabled))
+    end
+
     while true do
         Citizen.Wait(10) -- We don't need to run this all the time.
-        if clientPlayer.isMenuOpen == false and not IsPauseMenuActive() then
+        if Config.isPauseMenuEnabled and clientPlayer.isMenuOpen == false and not IsPauseMenuActive() then
             Citizen.Wait(10) -- MANDATORY WAIT. OMG I HATE THIS RESOURCE.
             if GetProfileSetting(204) == 1 then
                 minimapState = translateToBool[IsRadarHidden()] or false
@@ -237,3 +246,12 @@ Citizen.CreateThread(function()
         end
     end
 end)
+
+if Config.allowPlayerToDisableMenu then
+    RegisterCommand(Config.menuToggleCommand or "togglepausemenu", function()
+        if not Config.allowPlayerToDisableMenu then return end
+        Config.isPauseMenuEnabled = not Config.isPauseMenuEnabled
+        SetResourceKvp(Config.menuToggleKVP, tostring(Config.isPauseMenuEnabled))
+        debug("TOGGLE PAUSE MENU :: Pause menu has be set to "..tostring(Config.isPauseMenuEnabled))
+    end)
+end

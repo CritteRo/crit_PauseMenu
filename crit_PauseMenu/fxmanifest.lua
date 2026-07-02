@@ -6,9 +6,7 @@ website 'https://critte.ro'
 cfx_forum 'https://forum.cfx.re/u/critter/summary'
 
 description 'NUI PauseMenu replacement, inspired by the original '
-version '1.0.0'
-
-lua54 'yes'
+version '1.1.0'
 
 ui_page('public/client/html/index.html')
 
@@ -33,7 +31,8 @@ files {
 }
 
 exports {
-    'IsPauseMenuOpen'
+    'IsPauseMenuOpen',
+    'IsPauseMenuEnabled'
 }
 
 escrow_ignore {

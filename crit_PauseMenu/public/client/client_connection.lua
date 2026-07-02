@@ -21,5 +21,10 @@ RegisterNetEvent(Events.UPDATE_CLIENT, function(data)
 end)
 
 function IsPauseMenuOpen()
+    if not Config.isPauseMenuEnabled then return IsPauseMenuActive() end
     return clientPlayer.isMenuOpen
+end
+
+function IsPauseMenuEnabled()
+    return Config.isPauseMenuEnabled
 end

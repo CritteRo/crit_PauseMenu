@@ -10,14 +10,8 @@
 	<body style="opacity: 0; margin-top: 50vh">
 		<div class="main-container">
 			<div class="title-container">
-				<h1 class="main-title">Pause Menu</h1>
-				<p class="main-description">
-					Pause Menu Description - Lorem ipsum dolor sit amet
-					consectetur adipisicing elit. Laudantium voluptate dolorum
-					ratione, distinctio natus perferendis laborum nemo eveniet
-					dignissimos odit sunt vitae libero iure tempora, debitis ad
-					facilis quisquam recusandae?
-				</p>
+				<h1 class="main-title" data-label="MAIN_TITLE">Pause Menu</h1>
+				<p class="main-description" data-label="MAIN_DESCRIPTION"></p>
 			</div>
 			<div class="content-container">
 				<div class="left-container">
@@ -29,7 +23,7 @@
 						panel=".socials-panel"
 						tabindex="0"
 					>
-						<span class="blur">SOCIALS</span>
+						<span class="blur" data-label="BUTTON_SOCIALS">SOCIALS</span>
 					</button>
 					<button
 						class="noselect left-container-button mapHeader"
@@ -39,7 +33,7 @@
 						panel=".map-panel"
 						tabindex="0"
 					>
-						<span class="blur">MAP</span>
+						<span class="blur" data-label="BUTTON_MAP">MAP</span>
 					</button>
 					<button
 						class="noselect left-container-button settingsHeader"
@@ -49,7 +43,7 @@
 						panel=".empty-panel"
 						tabindex="0"
 					>
-						<span class="blur">SETTINGS</span>
+						<span class="blur" data-label="BUTTON_SETTINGS">SETTINGS</span>
 					</button>
 					<button
 						class="noselect left-container-button galleryHeader"
@@ -59,7 +53,7 @@
 						panel=".empty-panel"
 						tabindex="0"
 					>
-						<span class="blur">GALLERY</span>
+						<span class="blur" data-label="BUTTON_GALLERY">GALLERY</span>
 					</button>
 					<select
 						class="left-container-language-select"
@@ -85,6 +79,7 @@
 							optionID="info"
 							panel=".info-panel"
 							tabindex="0"
+                            data-label="BUTTON_INFORMATION"
 						>
 							INFO
 						</button>
@@ -94,6 +89,7 @@
 							optionID="players"
 							panel=".players-panel"
 							tabindex="0"
+                            data-label="BUTTON_PLAYER_LIST"
 						>
 							PLAYERS
 						</button>
@@ -102,6 +98,7 @@
 							optionID="leavepause"
 							onclick="leaveLobby()"
 							tabindex="0"
+                            data-label="BUTTON_CLOSE_MENU"
 						>
 							CLOSE MENU
 						</button>
@@ -111,6 +108,7 @@
 							optionID="leaveserver"
 							panel=".leave-server-panel"
 							tabindex="0"
+                            data-label="BUTTON_LEAVE_SERVER"
 						>
 							LEAVE SERVER >>
 						</button>
@@ -151,9 +149,7 @@
 								class="panel-section panel-section-text-template"
 								style="display: block"
 							>
-								<h3
-									class="panel-header-text socials-header-label"
-								>
+								<h3 class="panel-header-text socials-header-label" data-label="HEADER_SOCIALS">
 									Social Links
 								</h3>
 							</section>
@@ -180,20 +176,20 @@
 								<table>
 									<tbody>
 										<tr class="players-table-header">
-											<th class="opth-id">ID</th>
-											<th class="opth-player-name">
+											<th class="opth-id" data-label="TBL_ID">ID</th>
+											<th class="opth-player-name" data-label="TBL_PLAYER_NAME">
 												PLAYER NAME
 											</th>
-											<th class="opth-col1">
+											<th class="opth-col1" data-label="TBL_COL1">
 												DATA COL 1
 											</th>
-											<th class="opth-col2">
+											<th class="opth-col2" data-label="TBL_COL2">
 												DATA COL 2
 											</th>
-											<th class="opth-col3">
+											<th class="opth-col3" data-label="TBL_COL3">
 												DATA COL 3
 											</th>
-											<th class="opth-col4">
+											<th class="opth-col4" data-label="TBL_COL4">
 												DATA COL 4
 											</th>
 										</tr>
@@ -225,6 +221,7 @@
 							>
 								<h3
 									class="panel-header-text leave-server-header-label"
+                                    data-label="HEADER_LEAVE_SERVER"
 								>
 									Are you sure you want to leave?
 								</h3>
@@ -237,7 +234,7 @@
 									model=""
 									style="display: block"
 								>
-									<span class="leave-blur">Disconnect</span>
+									<span class="leave-blur" data-label="BUTTON_DISCONNECT">Disconnect</span>
 								</button>
 								<button
 									class="noselect leave-button exitGameButton"
@@ -246,7 +243,7 @@
 									model=""
 									style="display: block"
 								>
-									<span class="leave-blur">Quite Game</span>
+									<span class="leave-blur" data-label="BUTTON_QUIT_GAME">Quite Game</span>
 								</button>
 							</section>
 						</div>

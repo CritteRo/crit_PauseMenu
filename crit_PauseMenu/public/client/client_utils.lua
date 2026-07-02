@@ -1,4 +1,4 @@
-local frontEndWhitelist = {
+local frontEndAllowlist = {
     [3] = true,
     [6] = true,
     [10] = true,
@@ -105,12 +105,10 @@ function ToggleFullscreenMap()
         Wait(0)
     end
     PauseMenuceptionGoDeeper(0) --Setting up the context menu of the Pause Menu. For other frontend menus, use https://docs.fivem.net/natives/?_0xDD564BDD0472C936
-    PauseMenuceptionTheKick()
     while not IsEscapePressed() do --Waiting for any of frontend cancel buttons to be hit. Kinda slow but whatever.
         Wait(0)
     end
     getbacktoNUI = true
-    PauseMenuceptionTheKick() --doesn't really work, but the native's name is funny.
     SetFrontendActive(false) --Force-closing the entire frontend menu. I wanted a simple back button, but R* forced my hand.
 end
 
@@ -170,7 +168,7 @@ function SetupSettings()
     local past, current,buttonId = GetPauseMenuSelectionData()
     while true do
         past, current,buttonId = GetPauseMenuSelectionData()
-        if frontEndWhitelist[current] ~= nil or ((current <= -1 or current > 1000)--[[current sub-menu is -1, or is not a sub-menu, but R* is too dum-dum to use another native]]  and frontEndWhitelist[past] ~= nil) then
+        if frontEndAllowlist[current] ~= nil or ((current <= -1 or current > 1000)--[[current sub-menu is -1, or is not a sub-menu, but R* is too dum-dum to use another native]]  and frontEndAllowlist[past] ~= nil) then
             Wait(0)
         else
             debug("SetupSettings() :: returned with: current = "..current.." / past = "..past)
@@ -232,7 +230,7 @@ function SetupGallery()
     while true do
         SetFakePausemapPlayerPositionThisFrame(9999.9,9999.9)
         past, current,buttonId = GetPauseMenuSelectionData()
-        if frontEndWhitelist[current] ~= nil or ((current <= -1 or current > 1000)--[[current sub-menu is -1, or is not a sub-menu, but R* is too dum-dum to use another native]] and frontEndWhitelist[past] ~= nil) then
+        if frontEndAllowlist[current] ~= nil or ((current <= -1 or current > 1000)--[[current sub-menu is -1, or is not a sub-menu, but R* is too dum-dum to use another native]] and frontEndAllowlist[past] ~= nil) then
             Wait(0)
         else
             break
@@ -300,7 +298,7 @@ function SetupStats()
     local past, current,buttonId = GetPauseMenuSelectionData()
     while true do
         past, current,buttonId = GetPauseMenuSelectionData()
-        if frontEndWhitelist[current] ~= nil or ((current <= -1 or current > 1000)--[[current sub-menu is -1, or is not a sub-menu, but R* is too dum-dum to use another native]]  and frontEndWhitelist[past] ~= nil) then
+        if frontEndAllowlist[current] ~= nil or ((current <= -1 or current > 1000)--[[current sub-menu is -1, or is not a sub-menu, but R* is too dum-dum to use another native]]  and frontEndAllowlist[past] ~= nil) then
             Wait(0)
         else
             break
