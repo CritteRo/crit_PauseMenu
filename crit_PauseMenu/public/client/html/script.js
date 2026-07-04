@@ -2,6 +2,15 @@ let waitingForUiUpdate = false;
 let allowExit = false;
 let isHydrated = false;
 
+function escapeHtml(html) {
+    const text = document.createTextNode(html);
+    const p = document.createElement('p');
+    p.appendChild(text);
+    const retval = p.textContent;
+    p.remove();
+    return p.innerHTML;
+}
+
 window.addEventListener("message", (event) => {
 	if (event.data.type === "NUI_TOGGLE") {
 		// var x = document.getElementById("nui-top");
@@ -36,27 +45,6 @@ window.addEventListener("message", (event) => {
 		if (typeof event.data.players !== "undefined") {
 			SetupOnlinePlayersTable(event.data.players);
 		}
-	}
-});
-
-// Catch <a> links to open the browser automagically.
-// Thanks StackOverflow
-document.addEventListener("click", (e) => {
-	let target = e.target.closest("a");
-	if (target) {
-		// if the click was on or within an <a>
-		// Check if the <a> tag is part of the Info Panel.
-		var parent = target.closest(".info-panel");
-		if (parent) {
-			e.preventDefault();
-			window.invokeNative("openUrl", target.getAttribute("href"));
-		}
-	}
-});
-
-window.addEventListener("keydown", (event) => {
-	if (event.key == "Escape" || event.key == "p" || event.key == "Backspace") {
-		leaveLobby();
 	}
 });
 
@@ -136,22 +124,15 @@ function toggleLeftSideElement(el, toggle) {
 }
 
 function togglePanel(el) {
-	// Clear all first
 
-	document.querySelector(".info-panel").style.display = "none";
-	toggleHeaderElement(document.querySelector(".infoHeader"), false);
-	document.querySelector(".socials-panel").style.display = "none";
-	toggleLeftSideElement(document.querySelector(".socialsHeader"), false);
-	document.querySelector(".players-panel").style.display = "none";
-	toggleHeaderElement(document.querySelector(".playersHeader"), false);
-	document.querySelector(".leave-server-panel").style.display = "none";
-	toggleHeaderElement(document.querySelector(".closeMenu"), false);
-	document.querySelector(".empty-panel").style.display = "none";
-	toggleLeftSideElement(document.querySelector(".socialsHeader"), false);
-	toggleLeftSideElement(document.querySelector(".mapHeader"), false);
-	document.querySelector(".map-panel").style.display = "none";
-	toggleLeftSideElement(document.querySelector(".settingsHeader"), false);
-	toggleLeftSideElement(document.querySelector(".galleryHeader"), false);
+	// Clear all first
+    const panels = document.querySelectorAll(".panel");
+    const headerButtons = document.querySelectorAll(".header-button");
+    const leftSideButtons = document.querySelectorAll(".left-container-button");
+
+    panels.forEach( (x) => x.style.display = "none");
+    headerButtons.forEach( (x) => toggleHeaderElement(x, false));
+    leftSideButtons.forEach( (x) => toggleLeftSideElement(x, false));
 
 	// Activate Correct panel
 	if (el && el.hasAttribute("panel")) {
@@ -221,128 +202,90 @@ function setupLabels(data, overrideTitle, overrideDesc) {
 // INFO PANEL CONSTRUCTION
 
 function setInfoPanelData(data) {
-	const sections = document.querySelectorAll(".panel-section-data");
-	sections.forEach((x) => {
-		x.remove();
-	});
+	const panel = document.querySelector(".info-panel");
+	panel.innerHTML = "";
 	data.forEach((x) => {
-		createInfoPanelSection(x);
+		createInfoPanelSection(x, panel);
 	});
 }
 
-function createInfoPanelSection(data) {
+function createInfoPanelSection(data, panel) {
 	if (data[0] === "text") {
-		var _header = data[1] || "Missing Header Text";
-		var _description = data[2] || "Missing Description Text";
+		const _header = data[1] || "Missing Header Text";
+		const _description = data[2] || "Missing Description Text";
+        const _templateHtml = ` <section class="panel-section panel-section-text" style="display: block">
+                                    <h3 class="panel-header-text">${_header}</h3>
+                                    <p class="panel-text">${_description}</p>
+                                    ${data[3] ? `<a href="${data[3]}" target="_blank"><img src="${data[3]}"></a>` : ""}
+                                </section>`
+		panel.insertAdjacentHTML("beforeend", _templateHtml);
 
-		var template = document.querySelector(".panel-section-text-template");
-		var list = template.parentElement;
-		var cln = template.cloneNode(true);
-		cln.classList.add("panel-section-data");
-		cln.style.display = "block";
-		if (_header != "") {
-			cln.children[0].innerHTML = _header;
-		} else {
-			cln.children[0].remove();
-		}
-		if (_description != "") {
-			cln.children[1].innerHTML = _description;
-		} else {
-			cln.children[1].remove();
-		}
-		if (data[3]) {
-			var imgLink = document.createElement("a");
-			if (data[4]) {
-				imgLink.setAttribute("href", data[4]);
-			} else {
-				imgLink.setAttribute("href", data[3]);
-			}
-			imgLink.setAttribute("target", "_blank");
-			var oImg = document.createElement("img");
-			oImg.setAttribute("src", data[3]);
-			imgLink.appendChild(oImg);
-			cln.appendChild(imgLink);
-		}
-		list.appendChild(cln);
 	} else if (data[0] === "title") {
-		var _header = data[1] || "Missing Title Header Text";
-		var _pill = data[2];
-
-		var template = document.querySelector(".panel-section-title-template");
-		var list = template.parentElement;
-		var cln = template.cloneNode(true);
-		cln.classList.add("panel-section-data");
-		cln.style.display = "block";
-		cln.children[0].children[0].innerHTML = _header;
-		if (_pill) {
-			cln.children[0].children[1].innerHTML = _pill;
-		} else {
-			cln.children[0].children[1].innerHTML = "";
-			cln.children[0].children[1].style.display = "none";
-		}
-		list.appendChild(cln);
+		const _header = data[1] || "Missing Title Header Text";
+		const _pill = data[2];
+        const _templateHtml = ` <section class="panel-section panel-section-title" style="display: block">
+                                    <div class="flexbox">
+                                        <h2 class="panel-header-text">${_header}</h2>
+                                        ${_pill ? `<span class="panel-header-pill">${_pill}</span>` : ""}
+                                    </div>
+                                    <div class="line-divider"></div>
+                                </section>`
+        panel.insertAdjacentHTML("beforeend", _templateHtml);
 	}
 }
 
 // PLAYER PANEL CONSTRUCTION
 
 function SetupOnlinePlayersTable(data) {
-	const sections = document.querySelectorAll(".players-table-row");
-	sections.forEach((x) => {
-		x.remove();
-	});
+	const panel = document.querySelector(".players-table-body");
+	panel.innerHTML = "";
 	data.forEach((x) => {
-		CreateOnlinePlayerRow(x);
+		CreateOnlinePlayerRow(x, panel);
 	});
 }
 
-function CreateOnlinePlayerRow(data) {
-	var template = document.querySelector(".players-table-row-template");
-	var list = template.parentElement;
-	var cln = template.cloneNode(true);
-	cln.classList.add("players-table-row");
-	cln.style.display = "flex";
-	cln.children[0].textContent = data.id;
-	cln.children[1].textContent = data.name;
-	cln.children[2].textContent = (data.col1 || "");
-	cln.children[3].textContent = (data.col2 || "");
-	cln.children[4].textContent = (data.col3 || "");
-	cln.children[5].textContent = (data.col4 || "");
-	list.appendChild(cln);
+function CreateOnlinePlayerRow(data, panel) {
+	const _template = `<tr class="players-table-row" style="display: flex">
+                            <td>${data.id}</td> 
+                            <td>${escapeHtml(data.name)}</td>
+                            <td>${data.col1 || ""}</td>
+                            <td>${data.col2 || ""}</td>
+                            <td>${data.col3 || ""}</td>
+                            <td>${data.col4 || ""}</td>
+                        </tr>`
+    panel.insertAdjacentHTML("beforeend", _template);
 }
 
 // SOCIALS CONSTRUCTION
 
 function SetupSocialsPanel(data) {
-	var sections = document.querySelectorAll(".socials-button");
-	sections.forEach((x) => {
-		x.remove();
-	});
+	const panel = document.querySelector(".socials-grid");
+	panel.innerHTML = "";
 	data.forEach((x) => {
-		CreateSocialButton(x);
+		CreateSocialButton(x, panel);
 	});
 }
 
-function CreateSocialButton(data) {
-	var template = document.querySelector(".socials-button-template");
-	var list = template.parentElement;
-	var cln = template.cloneNode(true);
-	cln.classList.add("socials-button");
-	cln.style.display = "inline-block";
-	cln.style.backgroundImage = `linear-gradient(to top,rgba(0, 0, 0, 0.605),rgba(0, 0, 0, 0.4)),url("${data.urlImg || ""}")`;
-	cln.setAttribute("optionID", "social");
-	cln.setAttribute("url", data.url);
-	cln.children[0].textContent = data.name;
-	list.appendChild(cln);
+function CreateSocialButton(data, panel) {
+	const _template = ` <button
+                            class="noselect socials-button"
+                            onclick="toggleButton(this)"
+                            optionID="social"
+                            url="${data.url}"
+                            style='display: inline-block${data.urlImg ? `; background-image: linear-gradient(to top,rgba(0, 0, 0, 0.605),rgba(0, 0, 0, 0.4)),url("${data.urlImg}")` : ""}'
+                        >
+                            ${data.urlImg ? `<span class="socials-button-flex-end socials-">${data.name}</span>` : `${data.name}`}
+                        </button>`
+    panel.insertAdjacentHTML("beforeend", _template);
 }
 
 // LANGUAGE SELECTOR
 
 function selectSingleOption(el, _value) {
 	// helper function to select the existing language
-	var _options = el.options;
+	const _options = el.options;
 	if (_options) {
-		var i;
+		let i;
 		el.value = "";
 		for (i = 0; i < _options.length; i++) {
 			if (_options[i].value === String(_value)) {
@@ -354,34 +297,29 @@ function selectSingleOption(el, _value) {
 }
 
 function setupLanguages(allLang, currentLang) {
-	var list = document.querySelector(".left-container-language-select");
+	const list = document.querySelector(".left-container-language-select");
 	list.style.display = "block";
-	var sections = document.querySelectorAll(".language-option");
-	sections.forEach((x) => {
-		x.remove();
-	});
+	list.innerHTML = "";
 	allLang.forEach((x) => {
-		CreateLanguageOption(x);
+		CreateLanguageOption(x, list);
 	});
-	if (list.length > 2) {
+	if (list.length >= 2) {
 		selectSingleOption(list, currentLang);
 	} else {
 		list.style.display = "none";
 	}
 }
 
-function CreateLanguageOption(data) {
-	var template = document.querySelector(".language-option-template");
-	var list = template.parentElement;
-	var cln = template.cloneNode(true);
-	cln.classList.add("language-option");
-	cln.setAttribute("value", data[1]);
-	cln.textContent = data[0];
-	list.appendChild(cln);
+function CreateLanguageOption(data, panel) {
+	const _template = ` <option class="language-option-template language-option"
+                            value="${data[1]}"
+						>${data[0]}</option>`;
+	panel.insertAdjacentHTML("beforeend", _template);
 }
 
 window.onload = function () {
 	const languageSelector = document.querySelector(".left-container-language-select");
+    const infoPanelContainer = document.querySelector(".info-panel");
 	languageSelector.addEventListener("change", function () {
 		// console.log(languageSelector.value);
         isHydrated = false;
@@ -396,4 +334,18 @@ window.onload = function () {
 			}),
 		});
 	});
+
+    infoPanelContainer.addEventListener("click", (e) => {
+        let target = e.target.closest("a");
+        if (target) {
+            e.preventDefault();
+            window.invokeNative("openUrl", target.getAttribute("href"));
+        }
+    });
+
+    window.addEventListener("keydown", (event) => {
+        if (event.key == "Escape" || event.key == "p" || event.key == "Backspace") {
+            leaveLobby();
+        }
+    });
 };

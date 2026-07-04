@@ -116,37 +116,20 @@
 					<section class="right-content">
 						<!-- INFO PANEL -->
 						<div
-							class="info-panel"
+							class="panel info-panel"
 							style="display: block"
 							tabindex="0"
 						>
-							<section
-								class="panel-section panel-section-title-template"
-								style="display: none"
-							>
-								<div class="flexbox">
-									<h2 class="panel-header-text"></h2>
-									<span class="panel-header-pill"></span>
-								</div>
-								<div class="line-divider"></div>
-							</section>
-							<section
-								class="panel-section panel-section-text-template"
-								style="display: none"
-							>
-								<h3 class="panel-header-text"></h3>
-								<p class="panel-text"></p>
-							</section>
 						</div>
 
 						<!-- SOCIALS PANEL -->
 						<div
-							class="socials-panel"
+							class="panel socials-panel"
 							style="display: none"
 							tabindex="0"
 						>
 							<section
-								class="panel-section panel-section-text-template"
+								class="panel-section panel-section-text"
 								style="display: block"
 							>
 								<h3 class="panel-header-text socials-header-label" data-label="HEADER_SOCIALS">
@@ -168,42 +151,23 @@
 
 						<!-- ONLINE PLAYERS PANEL -->
 						<div
-							class="players-panel"
+							class="panel players-panel"
 							style="display: none"
 							tabindex="0"
 						>
 							<section class="players-table">
 								<table>
-									<tbody>
-										<tr class="players-table-header">
+                                    <thead>
+                                        <tr class="players-table-header">
 											<th class="opth-id" data-label="TBL_ID">ID</th>
-											<th class="opth-player-name" data-label="TBL_PLAYER_NAME">
-												PLAYER NAME
-											</th>
-											<th class="opth-col1" data-label="TBL_COL1">
-												DATA COL 1
-											</th>
-											<th class="opth-col2" data-label="TBL_COL2">
-												DATA COL 2
-											</th>
-											<th class="opth-col3" data-label="TBL_COL3">
-												DATA COL 3
-											</th>
-											<th class="opth-col4" data-label="TBL_COL4">
-												DATA COL 4
-											</th>
+											<th class="opth-player-name" data-label="TBL_PLAYER_NAME">PLAYER NAME</th>
+											<th class="opth-col1" data-label="TBL_COL1">DATA COL 1</th>
+											<th class="opth-col2" data-label="TBL_COL2">DATA COL 2</th>
+											<th class="opth-col3" data-label="TBL_COL3">DATA COL 3</th>
+											<th class="opth-col4" data-label="TBL_COL4">DATA COL 4</th>
 										</tr>
-										<tr
-											class="players-table-row-template"
-											style="display: none"
-										>
-											<td>1</td>
-											<td>CritteR</td>
-											<td>420</td>
-											<td>Admin 5</td>
-											<td>VIP RUBY</td>
-											<td>Police Dept.</td>
-										</tr>
+                                    </thead>
+									<tbody class="players-table-body">
 									</tbody>
 								</table>
 							</section>
@@ -211,7 +175,7 @@
 
 						<!-- LEAVE SERVER PANEL -->
 						<div
-							class="leave-server-panel"
+							class="panel leave-server-panel"
 							style="display: none"
 							tabindex="0"
 						>
@@ -250,14 +214,14 @@
 
 						<!-- EMPTY PANEL -->
 						<div
-							class="empty-panel"
+							class="panel empty-panel"
 							style="display: none"
 							tabindex="0"
 						></div>
 
 						<!-- MAP PANEL -->
 						<div
-							class="map-panel"
+							class="panel map-panel"
 							style="display: none"
 							tabindex="0"
 						>

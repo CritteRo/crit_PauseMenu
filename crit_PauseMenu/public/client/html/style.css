@@ -456,20 +456,20 @@ a:active {
 	font-size: 2.2rem;
 	font-weight: 600;
 	cursor: pointer;
+    transition: all 100ms;
 }
 
 .socials-button:hover {
 	box-shadow: 0 0 0.3rem 0.2rem rgba(21, 136, 217, 0.6);
 }
 
-.socials-blur {
-	width: 100%;
+.socials-button-flex-end {
+    width: 100%;
 	height: 100%;
 	display: flex;
 	align-items: flex-end;
 	justify-content: center;
 	padding: 1rem;
-	transition: all 100ms;
 }
 
 .socials-button:hover .socials-blur {
@@ -568,7 +568,7 @@ a:active {
 	width: 0;
 }
 
-.players-panel tbody {
+.players-panel tbody, .players-panel thead {
 	display: flex;
 	flex-direction: column;
 	gap: 0.2rem;
@@ -584,7 +584,7 @@ a:active {
 	align-items: center;
 }
 
-.players-panel tbody td {
+.players-panel tbody td, .players-panel thead td {
 	padding: 0.8rem 1rem;
 	font-weight: 600;
 	color: #fafafa;
@@ -593,7 +593,7 @@ a:active {
 	width: 0;
 }
 
-.players-panel tr:first-child {
+.players-panel thead tr:first-child {
 	background-color: rgb(21, 136, 217) !important;
 	margin-bottom: 1rem;
 }
