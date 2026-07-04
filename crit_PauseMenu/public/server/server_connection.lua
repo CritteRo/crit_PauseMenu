@@ -74,6 +74,7 @@ end
 
 -- Below functions showcase how you can update a player's playerlist.
 function BuildPlayerList()
+    if Config.statsInsteadOfPlayers then return end
     local playerlist = {}
     for i,k in ipairs(GetPlayers()) do
         local src = tonumber(k) -- global `source` is an int in Lua, but string in `GetPlayers()`. which means that main array also has Ints as sources.

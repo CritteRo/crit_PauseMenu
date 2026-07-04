@@ -4,6 +4,7 @@ Config = {
                                         -- If you only want to have one language, I would just leave this as "en", and only change the strings.
     isPauseMenuEnabled = true,          -- If you want to use the pause menu or not.
     allowPlayerToDisableMenu = true,    -- If true, players can use /togglepausemenu to enable / disable the menu for themselves.
+    statsInsteadOfPlayers = false,      -- If true, when pressing the Online players button, it will open the Stats menu instead. This will also stop the playerlist update.
     menuToggleKVP = "crit_PauseMenu:isEnabled", 
     menuToggleCommand = "togglepausemenu",
     defaultPanel = ".mapHeader",

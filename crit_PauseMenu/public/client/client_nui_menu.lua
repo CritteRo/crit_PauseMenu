@@ -10,6 +10,7 @@ bigMapState = {false, false}
 
 RegisterNetEvent(Events.RECEIVE_PLAYERLIST, function(data)
     if not Config.isPauseMenuEnabled then return end
+    if Config.statsInsteadOfPlayers then return end
     onlinePlayers = data
     debug("RECEIVE_PLAYERLIST :: Event Ran. "..json.encode(onlinePlayers))
     if IsNuiFocused() then
@@ -50,8 +51,8 @@ RegisterNUICallback('TOGGLE_PANEL', function(data, cb)
         SetupSettings()
     elseif data.option == "gallery" then
         SetupGallery()
-    -- elseif data.option == "players" then
-    --     SetupStats()
+    elseif data.option == "players" and Config.statsInsteadOfPlayers then
+        SetupStats()
     end
     if (GetProfileSetting(204) == 1 and data.option == "map") or data.option ~= "map" then
         clientPlayer.currentPanel = data.option
@@ -252,6 +253,6 @@ if Config.allowPlayerToDisableMenu then
         if not Config.allowPlayerToDisableMenu then return end
         Config.isPauseMenuEnabled = not Config.isPauseMenuEnabled
         SetResourceKvp(Config.menuToggleKVP, tostring(Config.isPauseMenuEnabled))
-        debug("TOGGLE PAUSE MENU :: Pause menu has be set to "..tostring(Config.isPauseMenuEnabled))
+        debug("TOGGLE PAUSE MENU :: Pause menu has been set to "..tostring(Config.isPauseMenuEnabled))
     end)
 end
