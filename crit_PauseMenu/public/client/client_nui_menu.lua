@@ -50,8 +50,8 @@ RegisterNUICallback('TOGGLE_PANEL', function(data, cb)
         SetupSettings()
     elseif data.option == "gallery" then
         SetupGallery()
-    elseif data.option == "players" then
-        SetupStats()
+    -- elseif data.option == "players" then
+    --     SetupStats()
     end
     if (GetProfileSetting(204) == 1 and data.option == "map") or data.option ~= "map" then
         clientPlayer.currentPanel = data.option

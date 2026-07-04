@@ -1,6 +1,6 @@
 let waitingForUiUpdate = false;
 let allowExit = false;
-let labels = {};
+let isHydrated = false;
 
 window.addEventListener("message", (event) => {
 	if (event.data.type === "NUI_TOGGLE") {
@@ -20,19 +20,21 @@ window.addEventListener("message", (event) => {
 		}
 	}
 	if (event.data.type === "SETUP_DATA") {
-		setupLabels(
-			event.data.labels,
-			event.data.overrideTitle,
-			event.data.overrideDesc
-		);
-		labels = event.data.labels;
-		setupLanguages(event.data.languages, event.data.currentLanguage);
-		setInfoPanelData(event.data.info);
+        if (!isHydrated) {
+            setupLabels(
+                event.data.labels,
+                event.data.overrideTitle,
+                event.data.overrideDesc
+            );
+            setupLanguages(event.data.languages, event.data.currentLanguage);
+            setInfoPanelData(event.data.info);
+            if (typeof event.data.socialButtons != "undefined") {
+                SetupSocialsPanel(event.data.socialButtons);
+            }
+            isHydrated = true;
+        }
 		if (typeof event.data.players !== "undefined") {
 			SetupOnlinePlayersTable(event.data.players);
-		}
-		if (typeof event.data.socialButtons != "undefined") {
-			SetupSocialsPanel(event.data.socialButtons);
 		}
 	}
 });
@@ -382,6 +384,7 @@ window.onload = function () {
 	const languageSelector = document.querySelector(".left-container-language-select");
 	languageSelector.addEventListener("change", function () {
 		// console.log(languageSelector.value);
+        isHydrated = false;
 		fetch(`https://${GetParentResourceName()}/TOGGLE_BUTTON`, {
 			method: "POST",
 			headers: {
